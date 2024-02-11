@@ -1,0 +1,21 @@
+<div class="container mt-5">
+    <div *ngIf="!registerMode" style="text-align: center;">
+        <h1>Witaj w aplikacji do katalogowania umów!</h1>
+        <p>Aplikacja umożliwia: </p>
+        <p>- przeglądanie umów</p>
+        <p>- dodawanie umów</p>
+        <p>- edycję umów</p>
+        <p>- dodawanie aneksów do umów</p>
+        <p>Zaloguj się, aby wykonywać powższe funkcje.</p>
+        <div class="text-center">
+            <button (click)="registerToggle()" class="btn btn-primary btn-lg me-2">Zarejestruj</button>
+        </div>
+    </div>
+    <div *ngIf="registerMode" class="container">
+        <div class="row justify-content-center">
+            <div class="col-4">
+                <app-register [rolesFromHomeComponent]="roles" (cancelRegister)="cancelRegisterMode($event)"></app-register>
+            </div>
+        </div>
+    </div>
+</div>

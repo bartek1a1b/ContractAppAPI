@@ -14,7 +14,8 @@ namespace ContractAppAPI.Data
         public DbSet<ContractAppAPI.Models.Contract> Contracts { get; set; }
         public DbSet<ContractTypeOne> ContractTypeOnes { get; set; }
         public DbSet<ContractTypeTwo> ContractTypeTwos { get; set; }
-
+        public DbSet<AppUser> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
