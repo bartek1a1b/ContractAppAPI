@@ -1,8 +1,6 @@
-﻿using ContractAppAPI.Models;
-
 namespace ContractAppAPI.Dto
 {
-    public class ContractTypeOneDto
+    public class RoleDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

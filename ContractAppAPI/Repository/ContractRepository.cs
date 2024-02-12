@@ -33,18 +33,29 @@ namespace ContractAppAPI.Repository
 
         public Contract GetContract(int id)
         {
-            return _context.Contracts.Where(c => c.Id == id).FirstOrDefault();
+            return _context.Contracts
+                .Where(c => c.Id == id)
+                .Include(cto => cto.ContractTypeOne)
+                .Include(ctt => ctt.ContractTypeTwo)
+                .FirstOrDefault();
         }
 
         public Contract GetContract(string name)
         {
-            return _context.Contracts.Where(c => c.Name == name).FirstOrDefault();
+            return _context.Contracts
+                .Where(c => c.Name == name)
+                .Include(cto => cto.ContractTypeOne)
+                .Include(ctt => ctt.ContractTypeTwo)
+                .FirstOrDefault();
         }
 
         public ICollection<Contract> GetContracts()
         {
             return _context.Contracts
-                .OrderBy(c => c.Id).ToList();
+                .OrderBy(c => c.Id)
+                .Include(cto => cto.ContractTypeOne)
+                .Include(ctt => ctt.ContractTypeTwo)
+                .ToList();
         }
 
         public bool Save()
