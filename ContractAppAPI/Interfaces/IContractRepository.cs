@@ -1,10 +1,14 @@
-﻿using ContractAppAPI.Models;
+﻿using ContractAppAPI.Dto;
+using ContractAppAPI.Helper;
+using ContractAppAPI.Models;
 
 namespace ContractAppAPI.Interfaces
 {
     public interface IContractRepository
     {
-        ICollection<Contract> GetContracts();
+        Task<PagedList<ContractDto>> GetContractsDtosAsync(UserParams userParams, string searchPhrase);
+        Task<ICollection<Contract>> GetContractsAsync();
+        Task<PagedList<Contract>> GetContractsAsync(UserParams userParams);
         Contract GetContract(int id);
         Contract GetContract(string name);
         bool ContractExists(int conId);

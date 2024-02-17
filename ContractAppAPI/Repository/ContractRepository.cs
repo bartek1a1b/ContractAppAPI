@@ -1,4 +1,8 @@
-﻿using ContractAppAPI.Data;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using ContractAppAPI.Data;
+using ContractAppAPI.Dto;
+using ContractAppAPI.Helper;
 using ContractAppAPI.Interfaces;
 using ContractAppAPI.Models;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +12,12 @@ namespace ContractAppAPI.Repository
     public class ContractRepository : IContractRepository
     {
         private readonly DataContext _context;
+        private readonly IMapper _mapper;
 
-        public ContractRepository(DataContext context)
+        public ContractRepository(DataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public bool ContractExists(int conId)
@@ -49,13 +55,42 @@ namespace ContractAppAPI.Repository
                 .FirstOrDefault();
         }
 
-        public ICollection<Contract> GetContracts()
+        public async Task<PagedList<ContractDto>> GetContractsDtosAsync(UserParams userParams, string searchPhrase)
         {
-            return _context.Contracts
+            var query = _context.Contracts
+                .ProjectTo<ContractDto>(_mapper.ConfigurationProvider)
+                .Where(c => c.ContractNumber.ToString().Contains(searchPhrase) 
+                || c.Name.ToLower().Contains(searchPhrase.ToLower())
+                || c.TypeNameOne.ToLower().Contains(searchPhrase.ToLower()) 
+                || c.TypeNameTwo.ToLower().Contains(searchPhrase.ToLower())
+                || c.DateOfConclusion.ToString().Contains(searchPhrase) 
+                || c.Description.Contains(searchPhrase.ToLower())
+                || c.Value.ToString().Contains(searchPhrase) 
+                || c.Contractor.ToLower().Contains(searchPhrase.ToLower())
+                || c.Signatory.ToLower().Contains(searchPhrase.ToLower()))
+                .AsNoTracking();
+
+            return await PagedList<ContractDto>.CreateAsync(query, userParams.PageNumber, userParams.PageSize);
+        }
+
+        public async Task<PagedList<Contract>> GetContractsAsync(UserParams userParams)
+        {
+            var query = _context.Contracts
                 .OrderBy(c => c.Id)
                 .Include(cto => cto.ContractTypeOne)
                 .Include(ctt => ctt.ContractTypeTwo)
-                .ToList();
+                .AsNoTracking();
+
+            return await PagedList<Contract>.CreateAsync(query, userParams.PageNumber, userParams.PageSize);
+        }
+
+        public async Task<ICollection<Contract>> GetContractsAsync()
+        {
+            return await _context.Contracts
+                .OrderBy(c => c.Id)
+                .Include(cto => cto.ContractTypeOne)
+                .Include(ctt => ctt.ContractTypeTwo)
+                .ToListAsync();
         }
 
         public bool Save()
@@ -69,5 +104,6 @@ namespace ContractAppAPI.Repository
             _context.Update(contract);
             return Save();
         }
+
     }
 }

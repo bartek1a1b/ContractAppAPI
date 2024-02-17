@@ -16,7 +16,7 @@ const routes: Routes = [
     canActivate: [authGuard],
     children: [
       {path: 'contracts', component: ContractListComponent},
-      {path: 'contracts/:id', component: ContractEditComponent},
+      {path: 'contract/edit/:id', component: ContractEditComponent},
       {path: 'add', component: AddComponent},
     ]},
     {path: 'errors', component: TestErrorComponent},

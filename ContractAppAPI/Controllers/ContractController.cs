@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using ContractAppAPI.Data;
 using ContractAppAPI.Dto;
+using ContractAppAPI.Extensions;
+using ContractAppAPI.Helper;
 using ContractAppAPI.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,11 +28,14 @@ namespace ContractAppAPI.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<ContractAppAPI.Models.Contract>))]
-        public IActionResult GetContracts()
+        [HttpGet("dtos")]
+        public async Task<ActionResult<PagedList<ContractDto>>> GetContractsDtosAsync([FromQuery] UserParams userParams, string searchPhrase)
         {
-            var contracts = _mapper.Map<List<ContractDto>>(_contractRepository.GetContracts());
+            var contracts = await _contractRepository.GetContractsDtosAsync(userParams, searchPhrase);
+
+            Response.AddPaginationHeader(new PaginationHeader(contracts.CurrentPage, contracts.PageSize, contracts.TotalCount, contracts.TotalPages));
+
+            var contractsDto = _mapper.Map<List<ContractDto>>(contracts);
 
 
             if (!ModelState.IsValid)
@@ -38,7 +43,43 @@ namespace ContractAppAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            return Ok(contracts);
+            return Ok(contractsDto);
+        }
+
+        [HttpGet("all")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<ContractAppAPI.Models.Contract>))]
+        public async Task<IActionResult> GetContractsAsync()
+        {
+            var contracts = await _contractRepository.GetContractsAsync();
+
+            var contractsDto = _mapper.Map<List<ContractDto>>(contracts);
+
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Ok(contractsDto);
+        }
+
+        [HttpGet]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<ContractAppAPI.Models.Contract>))]
+        public async Task<ActionResult<PagedList<ContractDto>>> GetContractsAsync([FromQuery] UserParams userParams)
+        {
+            var contracts = await _contractRepository.GetContractsAsync(userParams);
+
+            Response.AddPaginationHeader(new PaginationHeader(contracts.CurrentPage, contracts.PageSize, contracts.TotalCount, contracts.TotalPages));
+
+            var contractsDto = _mapper.Map<List<ContractDto>>(contracts);
+
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Ok(contractsDto);
         }
 
         [HttpGet("{conId}")]
@@ -64,18 +105,18 @@ namespace ContractAppAPI.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateContract([FromQuery] int contractTypeOneId, [FromQuery] int contractTypeTwoId, [FromBody] ContractDto contractCreate)
+        public async Task<IActionResult> CreateContract([FromQuery] int contractTypeOneId, [FromQuery] int contractTypeTwoId, [FromBody] ContractAddDto contractCreate)
         {
             if (contractCreate == null)
             {
                 return BadRequest(ModelState);
             }
 
-            var contracts = _contractRepository.GetContracts()
-                .Where(c => c.Name.Trim().ToUpper() == contractCreate.Name.TrimEnd().ToUpper())
-                .FirstOrDefault();
+            var contracts = await _contractRepository.GetContractsAsync();
 
-            if (contracts != null)
+            var existingContract = contracts.FirstOrDefault(c => c.Name.Trim().ToUpper() == contractCreate.Name.TrimEnd().ToUpper());
+
+            if (existingContract != null)
             {
                 ModelState.AddModelError("", "Umowa już istnieje");
                 return StatusCode(422, ModelState);

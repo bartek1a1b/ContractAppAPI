@@ -12,6 +12,8 @@ namespace ContractAppAPI.Helper
                 .ForMember(dest => dest.TypeNameOne, opt => opt.MapFrom(src => src.ContractTypeOne.Name))
                 .ForMember(dest => dest.TypeNameTwo, opt => opt.MapFrom(src => src.ContractTypeTwo.Name));
             CreateMap<ContractDto, Contract>();
+            CreateMap<Contract, ContractAddDto>();
+            CreateMap<ContractAddDto, Contract>();
             CreateMap<ContractTypeOne, ContractTypeOneDto>();
             CreateMap<ContractTypeOneDto, ContractTypeOne>();
             CreateMap<ContractTypeTwo, ContractTypeTwoDto>();
