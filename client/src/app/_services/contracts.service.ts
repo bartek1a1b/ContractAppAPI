@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Contract } from '../_models/contract';
-import { Observable, catchError, map, throwError } from 'rxjs';
+import { Observable, catchError, map, of, throwError } from 'rxjs';
 import { PaginatedResult } from '../_models/pagination';
 
 @Injectable({
@@ -10,6 +10,7 @@ import { PaginatedResult } from '../_models/pagination';
 })
 export class ContractsService {
   baseUrl = environment.apiUrl;
+  contracts: Contract[] = [];
   paginatedResult: PaginatedResult<Contract[]> = new PaginatedResult<Contract[]>;
 
   constructor(private http: HttpClient) { }
@@ -48,6 +49,15 @@ export class ContractsService {
   getSearchContracts(searchPhrase: string): Observable<Contract[]> {
     const url = `${this.baseUrl}contract/search/?searchPhrase=${searchPhrase}`;
     return this.http.get<Contract[]>(url);
+  }
+
+  updateContract(conId: number, contractTypeOneId: number, contractTypeTwoId: number, updatedContract: Contract) {
+    const url = `${this.baseUrl}contract/update/${conId}?contractTypeOneId=${contractTypeOneId}&contractTypeTwoId=${contractTypeTwoId}`;
+    return this.http.put(url, updatedContract, {responseType: 'text'});
+  }
+
+  deleteContract(conId: number) {
+    return this.http.delete(this.baseUrl + 'contract/delete-contract/' + conId);
   }
 
 }

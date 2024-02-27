@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Contract } from 'src/app/_models/contract';
@@ -11,6 +11,7 @@ import { ContractsService } from 'src/app/_services/contracts.service';
   styleUrls: ['./contract-list.component.css']
 })
 export class ContractListComponent implements OnInit {
+  @Input() contract: Contract | undefined;
   contracts: Contract[] = [];
   pagination: Pagination | undefined;
   pageNumber = 1;
@@ -34,12 +35,24 @@ export class ContractListComponent implements OnInit {
     })
   }
 
+  deleteContract(conId: number) {
+    this.contractService.deleteContract(conId).subscribe({
+      next: _ => {
+        if (this.contract) {
+          this.contracts = this.contracts.filter(c => c.id !== conId);
+        }
+      },
+      complete: () => {
+        this.loadContracts();
+      }
+    });
+  }
+
   pageChanged(event: any) {
     if (this.pageNumber !== event.page) {
       this.pageNumber = event.page;
       this.loadContracts();
     }
-
   }
 
   fetchData(): void {
@@ -60,6 +73,7 @@ export class ContractListComponent implements OnInit {
 
   clearSearch(): void {
     this.loadContracts();
+    this.searchForm.reset();
   }
 
 }

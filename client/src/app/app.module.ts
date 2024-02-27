@@ -19,6 +19,11 @@ import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { ServerErrorComponent } from './errors/server-error/server-error.component';
 import { JwtInterceptor } from './_interceptors/jwt.interceptor';
 import { ContractSearchComponent } from './contracts/contract-search/contract-search.component';
+import { LoadingInterceptor } from './_interceptors/loading.interceptor';
+import { ContractTypeOneListComponent } from './contractType/contract-type-one-list/contract-type-one-list.component';
+import { ContractTypeTwoListComponent } from './contractType/contract-type-two-list/contract-type-two-list.component';
+import { ContractTypeOneAddComponent } from './contractType/contract-type-one-add/contract-type-one-add.component';
+import { ContractTypeTwoAddComponent } from './contractType/contract-type-two-add/contract-type-two-add.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +38,10 @@ import { ContractSearchComponent } from './contracts/contract-search/contract-se
     NotFoundComponent,
     ServerErrorComponent,
     ContractSearchComponent,
+    ContractTypeOneListComponent,
+    ContractTypeTwoListComponent,
+    ContractTypeOneAddComponent,
+    ContractTypeTwoAddComponent,
   ],
   imports: [
     BrowserModule,
@@ -45,7 +54,8 @@ import { ContractSearchComponent } from './contracts/contract-search/contract-se
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true},
   ],
   bootstrap: [AppComponent]
 })

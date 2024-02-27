@@ -1,0 +1,23 @@
+<div class="container">
+    <div class="table-responsive">
+        <button class="btn btn-primary mb-2" routerLink="/add-contractTypeOne">+ Dodaj typ 1</button>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nr Id</th>
+                    <th>Nazwa</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let contractTypeOne of contractTypeOnes">
+                    <td>{{contractTypeOne.id}}</td>
+                    <td>{{contractTypeOne.name}}</td>
+                    <td><button class="btn btn-success" >Edytuj</button></td>
+                    <td><button class="btn btn-danger" (click)="deleteContractTypeOne(contractTypeOne.id)">Usuń</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

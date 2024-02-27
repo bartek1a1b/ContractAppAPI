@@ -105,7 +105,7 @@ namespace ContractAppAPI.Controllers
                 return StatusCode(500, ModelState);
             }
 
-            return Ok("Pomyślnie dodano umowę");
+            return Ok("Pomyślnie dodano typ");
         }
 
         [HttpPut("{contractTypeOneId}")]
@@ -130,14 +130,14 @@ namespace ContractAppAPI.Controllers
 
             if (!_contractTypeOneRepository.UpdateContractTypeOne(contractTypeOneMap))
             {
-                ModelState.AddModelError("", "Something went wrong updating owner");
+                ModelState.AddModelError("", "Wystąpił błąd podczas edycji");
                 return StatusCode(500, ModelState);
             }
 
             return NoContent();
         }
 
-        [HttpDelete("{contractTypeOneId}")]
+        [HttpDelete("delete-contractTypeOne/{contractTypeOneId}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
@@ -155,7 +155,7 @@ namespace ContractAppAPI.Controllers
 
             if (!_contractTypeOneRepository.DeleteContractTypeOne(contractTypeOneDelete))
             {
-                ModelState.AddModelError("", "Something went wrong deleting owner");
+                ModelState.AddModelError("", "Wystąpił błąd podczas usuwania");
             }
 
             return NoContent();

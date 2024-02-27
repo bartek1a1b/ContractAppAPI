@@ -9,6 +9,10 @@ import { TestErrorComponent } from './errors/test-error/test-error.component';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { ServerErrorComponent } from './errors/server-error/server-error.component';
 import { ContractSearchComponent } from './contracts/contract-search/contract-search.component';
+import { ContractTypeOneListComponent } from './contractType/contract-type-one-list/contract-type-one-list.component';
+import { ContractTypeTwoListComponent } from './contractType/contract-type-two-list/contract-type-two-list.component';
+import { ContractTypeOneAddComponent } from './contractType/contract-type-one-add/contract-type-one-add.component';
+import { ContractTypeTwoAddComponent } from './contractType/contract-type-two-add/contract-type-two-add.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -20,6 +24,10 @@ const routes: Routes = [
       {path: 'contract/search', component: ContractSearchComponent},
       {path: 'contract/edit/:id', component: ContractEditComponent},
       {path: 'add', component: AddComponent},
+      {path: 'contractTypeOnes', component: ContractTypeOneListComponent},
+      {path: 'add-contractTypeOne', component: ContractTypeOneAddComponent},
+      {path: 'add-contractTypeTwo', component: ContractTypeTwoAddComponent},
+      {path: 'contractTypeTwos', component: ContractTypeTwoListComponent},
     ]},
     {path: 'errors', component: TestErrorComponent},
     {path: 'not-found', component: NotFoundComponent},

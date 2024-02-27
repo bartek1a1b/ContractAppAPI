@@ -134,18 +134,18 @@ namespace ContractAppAPI.Controllers
 
             if (!_contractRepository.CreateContract(contractTypeOneId, contractTypeTwoId, contractMap))
             {
-                ModelState.AddModelError("", "Something went wrong while savin");
+                ModelState.AddModelError("", "Wystąpił błąd podczas dodawania umowy");
                 return StatusCode(500, ModelState);
             }
 
-            return Ok("Succesfully created");
+            return Ok("Pomyślnie dodano umowę");
         }
 
-        [HttpPut("{conId}")]
+        [HttpPut("update/{conId}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public IActionResult UpdateContract(int conId, [FromQuery] int contractTypeOneId, [FromQuery] int contractTypeTwoId, [FromBody] ContractDto updatedContract)
+        public IActionResult UpdateContract(int conId, [FromQuery] int contractTypeOneId, [FromQuery] int contractTypeTwoId, [FromBody] ContractAddDto updatedContract)
         {
             if (updatedContract == null)
                 return BadRequest(ModelState);
@@ -173,7 +173,7 @@ namespace ContractAppAPI.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{conId}")]
+        [HttpDelete("delete-contract/{conId}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
@@ -191,7 +191,7 @@ namespace ContractAppAPI.Controllers
 
             if (!_contractRepository.DeleteContract(contractToDelete))
             {
-                ModelState.AddModelError("", "Something went wrong deleting owner");
+                ModelState.AddModelError("", "Wystąpił błąd podczas usuwania umowy");
             }
 
             return NoContent();

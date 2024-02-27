@@ -1,4 +1,5 @@
 <div class="container">
+    <button type="button" class="btn btn-primary mb-2" routerLink="/add">+ Dodaj umowę</button>
     <div class="formSearch mb-2">
         <form [formGroup]="searchForm" class="searchBar" (ngSubmit)="onSearchSubmit()">
             <div class="input-group">
@@ -12,6 +13,7 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th>Nr Id</th>
                     <th>Nr kontraktu</th>
                     <th>Nazwa</th>
                     <th>Opis</th>
@@ -23,21 +25,24 @@
                     <th>Sygnatariusz</th>
                     <th>PDF</th>
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let contract of contracts">
+                    <td>{{contract.id}}</td>
                     <td>{{contract.contractNumber}}</td>
                     <td>{{contract.name}}</td>
                     <td>{{contract.description}}</td>
                     <td>{{contract.typeNameOne}}</td>
                     <td>{{contract.typeNameTwo}}</td>
-                    <td>{{contract.dateOfConclusion}}</td>
+                    <td>{{contract.dateOfConclusion | date: 'dd MMM, yyyy'}}</td>
                     <td>{{contract.value}}</td>
                     <td>{{contract.contractor}}</td>
                     <td>{{contract.signatory}}</td>
                     <td>{{contract.pdf}}</td>
                     <td><button class="btn btn-success" routerLink="/contract/edit/{{contract.id}}">Edytuj</button></td>
+                    <td><button class="btn btn-danger" (click)="deleteContract(contract.id)">Usuń</button></td>
                 </tr>
             </tbody>
         </table>
