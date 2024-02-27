@@ -58,16 +58,17 @@ namespace ContractAppAPI.Repository
         public async Task<PagedList<ContractDto>> GetContractsDtosAsync(UserParams userParams, string searchPhrase)
         {
             var query = _context.Contracts
-                .ProjectTo<ContractDto>(_mapper.ConfigurationProvider)
+                
                 .Where(c => c.ContractNumber.ToString().Contains(searchPhrase) 
                 || c.Name.ToLower().Contains(searchPhrase.ToLower())
-                || c.TypeNameOne.ToLower().Contains(searchPhrase.ToLower()) 
-                || c.TypeNameTwo.ToLower().Contains(searchPhrase.ToLower())
+                || c.ContractTypeOne.Name.ToLower().Contains(searchPhrase.ToLower()) 
+                || c.ContractTypeTwo.Name.ToLower().Contains(searchPhrase.ToLower())
                 || c.DateOfConclusion.ToString().Contains(searchPhrase) 
                 || c.Description.Contains(searchPhrase.ToLower())
                 || c.Value.ToString().Contains(searchPhrase) 
                 || c.Contractor.ToLower().Contains(searchPhrase.ToLower())
                 || c.Signatory.ToLower().Contains(searchPhrase.ToLower()))
+                .ProjectTo<ContractDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking();
 
             return await PagedList<ContractDto>.CreateAsync(query, userParams.PageNumber, userParams.PageSize);

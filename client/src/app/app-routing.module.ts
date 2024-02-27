@@ -8,6 +8,7 @@ import { authGuard } from './_guards/auth.guard';
 import { TestErrorComponent } from './errors/test-error/test-error.component';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { ServerErrorComponent } from './errors/server-error/server-error.component';
+import { ContractSearchComponent } from './contracts/contract-search/contract-search.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -16,6 +17,7 @@ const routes: Routes = [
     canActivate: [authGuard],
     children: [
       {path: 'contracts', component: ContractListComponent},
+      {path: 'contract/search', component: ContractSearchComponent},
       {path: 'contract/edit/:id', component: ContractEditComponent},
       {path: 'add', component: AddComponent},
     ]},

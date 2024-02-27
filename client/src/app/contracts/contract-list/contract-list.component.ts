@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Contract } from 'src/app/_models/contract';
 import { Pagination } from 'src/app/_models/pagination';
 import { ContractsService } from 'src/app/_services/contracts.service';
@@ -13,8 +15,9 @@ export class ContractListComponent implements OnInit {
   pagination: Pagination | undefined;
   pageNumber = 1;
   pageSize = 10;
+  searchPhrase = '';
 
-  constructor(private contractService: ContractsService) { }
+  constructor(private contractService: ContractsService, private fb: FormBuilder, private router: Router) { }
 
   ngOnInit(): void {
     this.loadContracts();
@@ -37,6 +40,26 @@ export class ContractListComponent implements OnInit {
       this.loadContracts();
     }
 
+  }
+
+  fetchData(): void {
+    this.contractService.getSearchContracts(this.searchPhrase).subscribe(contracts => {
+      this.contracts = contracts;
+      console.log(this.contracts);
+    })
+  }
+
+  searchForm = this.fb.nonNullable.group({
+    searchPhrase: '',
+  })
+
+  onSearchSubmit(): void {
+    this.searchPhrase= this.searchForm.value.searchPhrase ?? '';
+    this.fetchData();
+  }
+
+  clearSearch(): void {
+    this.loadContracts();
   }
 
 }

@@ -28,7 +28,7 @@ namespace ContractAppAPI.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("dtos")]
+        [HttpGet("search")]
         public async Task<ActionResult<PagedList<ContractDto>>> GetContractsDtosAsync([FromQuery] UserParams userParams, string searchPhrase)
         {
             var contracts = await _contractRepository.GetContractsDtosAsync(userParams, searchPhrase);
@@ -63,7 +63,7 @@ namespace ContractAppAPI.Controllers
             return Ok(contractsDto);
         }
 
-        [HttpGet]
+        [HttpGet("dtos")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<ContractAppAPI.Models.Contract>))]
         public async Task<ActionResult<PagedList<ContractDto>>> GetContractsAsync([FromQuery] UserParams userParams)
         {

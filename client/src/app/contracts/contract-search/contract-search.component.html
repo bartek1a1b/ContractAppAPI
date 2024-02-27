@@ -1,0 +1,36 @@
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nr kontraktu</th>
+                <th>Nazwa</th>
+                <th>Opis</th>
+                <th>Typ 1</th>
+                <th>Typ 2</th>
+                <th>Data zawarcia</th>
+                <th>Wartość</th>
+                <th>Kontraktor</th>
+                <th>Sygnatariusz</th>
+                <th>PDF</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let contract of contracts">
+                <td>{{contract.contractNumber}}</td>
+                <td>{{contract.name}}</td>
+                <td>{{contract.description}}</td>
+                <td>{{contract.typeNameOne}}</td>
+                <td>{{contract.typeNameTwo}}</td>
+                <td>{{contract.dateOfConclusion}}</td>
+                <td>{{contract.value}}</td>
+                <td>{{contract.contractor}}</td>
+                <td>{{contract.signatory}}</td>
+                <td>{{contract.pdf}}</td>
+                <td><button class="btn btn-success" routerLink="/contract/edit/{{contract.id}}">Edytuj</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+

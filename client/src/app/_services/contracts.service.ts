@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Contract } from '../_models/contract';
-import { Observable, map, throwError } from 'rxjs';
+import { Observable, catchError, map, throwError } from 'rxjs';
 import { PaginatedResult } from '../_models/pagination';
 
 @Injectable({
@@ -22,7 +22,7 @@ export class ContractsService {
       params = params.append('pageSize', itemsPerPage);
     }
 
-    return this.http.get<Contract[]>(this.baseUrl + 'contract', {observe: 'response', params}).pipe(
+    return this.http.get<Contract[]>(this.baseUrl + 'contract/dtos', {observe: 'response', params}).pipe(
       map(response => {
         if (response.body) {
           this.paginatedResult.result = response.body;
@@ -43,6 +43,11 @@ export class ContractsService {
   createContract(contractData: any, contractTypeOneId: number, contractTypeTwoId: number) {
     const url = `${this.baseUrl}contract?contractTypeOneId=${contractTypeOneId}&contractTypeTwoId=${contractTypeTwoId}`;
     return this.http.post(url, contractData, {responseType: 'text'});
+  }
+
+  getSearchContracts(searchPhrase: string): Observable<Contract[]> {
+    const url = `${this.baseUrl}contract/search/?searchPhrase=${searchPhrase}`;
+    return this.http.get<Contract[]>(url);
   }
 
 }
