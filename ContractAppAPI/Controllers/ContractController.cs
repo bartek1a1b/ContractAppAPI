@@ -93,11 +93,11 @@ namespace ContractAppAPI.Controllers
 
             if (!_contractRepository.CreateContract(contractTypeOneId, contractTypeTwoId, contractMap))
             {
-                ModelState.AddModelError("", "Something went wrong while savin");
+                ModelState.AddModelError("", "Wystąpił błąd podczas dodawania umowy");
                 return StatusCode(500, ModelState);
             }
 
-            return Ok("Succesfully created");
+            return Ok("Pomyślnie dodano umowę");
         }
 
         [HttpPut("{conId}")]
@@ -150,7 +150,7 @@ namespace ContractAppAPI.Controllers
 
             if (!_contractRepository.DeleteContract(contractToDelete))
             {
-                ModelState.AddModelError("", "Something went wrong deleting owner");
+                ModelState.AddModelError("", "Wystąpił błąd podczas usuwania umowy");
             }
 
             return NoContent();

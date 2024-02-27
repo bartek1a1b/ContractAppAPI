@@ -130,7 +130,7 @@ namespace ContractAppAPI.Controllers
 
             if (!_contractTypeTwoRepository.UpdateContractTypeTwo(contractTypeTwoMap))
             {
-                ModelState.AddModelError("", "Something went wrong updating owner");
+                ModelState.AddModelError("", "Wystąpił błąd podczas edycji");
                 return StatusCode(500, ModelState);
             }
 
@@ -155,7 +155,7 @@ namespace ContractAppAPI.Controllers
 
             if (!_contractTypeTwoRepository.DeleteContractTypeTwo(contractTypeTwoDelete))
             {
-                ModelState.AddModelError("", "Something went wrong deleting owner");
+                ModelState.AddModelError("", "Wystąpił błąd podczas usuwania");
             }
 
             return NoContent();
