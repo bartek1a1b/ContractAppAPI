@@ -24,6 +24,7 @@ import { ContractTypeOneListComponent } from './contractType/contract-type-one-l
 import { ContractTypeTwoListComponent } from './contractType/contract-type-two-list/contract-type-two-list.component';
 import { ContractTypeOneAddComponent } from './contractType/contract-type-one-add/contract-type-one-add.component';
 import { ContractTypeTwoAddComponent } from './contractType/contract-type-two-add/contract-type-two-add.component';
+import { TextInputComponent } from './_forms/text-input/text-input.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { ContractTypeTwoAddComponent } from './contractType/contract-type-two-ad
     ContractTypeTwoListComponent,
     ContractTypeOneAddComponent,
     ContractTypeTwoAddComponent,
+    TextInputComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,6 +51,7 @@ import { ContractTypeTwoAddComponent } from './contractType/contract-type-two-ad
     HttpClientModule,
     BrowserAnimationsModule,
     FormsModule,
+    ReactiveFormsModule,
     SharedModule,
     ReactiveFormsModule
   ],

@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
+using AutoMapper;
 using ContractAppAPI.Data;
 using ContractAppAPI.Dto;
 using ContractAppAPI.Interfaces;
@@ -9,15 +10,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ContractAppAPI.Controllers
 {
-   public class AccountController : BaseApiController
+    public class AccountController : BaseApiController
     {
         private readonly DataContext _context;
         private readonly ITokenService _tokenService;
+        private readonly IMapper _mapper;
 
-        public AccountController(DataContext context, ITokenService tokenService)
+        public AccountController(DataContext context, ITokenService tokenService, IMapper mapper)
         {
             _context = context;
             _tokenService = tokenService;
+            _mapper = mapper;
         }
 
         [HttpPost("register")]
@@ -25,17 +28,16 @@ namespace ContractAppAPI.Controllers
         {
             if (await UserExists(registerDto.Email)) return BadRequest("Email jest zajęty");
 
+            var user = _mapper.Map<AppUser>(registerDto);
+
             using var hmac = new HMACSHA512();
 
-            var user = new AppUser
-            {
-                Email = registerDto.Email,
-                FirstName = registerDto.FirstName,
-                LastName = registerDto.LastName,
-                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
-                PasswordSalt = hmac.Key,
-                RoleId = registerDto.RoleId
-            };
+            user.Email = registerDto.Email;
+            user.FirstName = registerDto.FirstName;
+            user.LastName = registerDto.LastName;
+            user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password));
+            user.PasswordSalt = hmac.Key;
+            user.RoleId = registerDto.RoleId;
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -75,5 +77,5 @@ namespace ContractAppAPI.Controllers
         {
             return await _context.Users.AnyAsync(u => u.Email == email);
         }
-    } 
+    }
 }

@@ -1,28 +1,34 @@
-<form #registerForm="ngForm" (ngSubmit)="register()" autocomplete="off">
+<form [formGroup]="registerForm" (ngSubmit)="registerForm.valid && register()" autocomplete="off">
     <h2 class="text-center text-primary">Zarejestruj</h2>
     <hr>
     <div class="mb-3">
-        <input type="text" class="form-control" name="email" [(ngModel)]="model.email" placeholder="Email">
+        <label style="margin-right: 10px;">Rola: </label>
+        <label class="form-check-label">
+            <input type="radio" class="form-check-label" value="3" formControlName="roleId"> Admin
+        </label>
+        <label class="form-check-label">
+            <input type="radio" class="form-check-label ms-3" value="2" formControlName="roleId"> Edytujący
+        </label>
+        <label class="form-check-label">
+            <input type="radio" class="form-check-label ms-3" value="1" formControlName="roleId"> Przeglądający
+        </label>
     </div>
-    <div class="mb-3">
-        <input type="text" class="form-control" name="firstName" [(ngModel)]="model.firstName" placeholder="Imię">
+    <app-text-input [formControl]="$any(registerForm.controls['email'])" [label]="'Email'" [type]="'email'"></app-text-input>
+    <app-text-input [formControl]="$any(registerForm.controls['firstName'])" [label]="'Imię'"></app-text-input>
+    <app-text-input [formControl]="$any(registerForm.controls['lastName'])" [label]="'Nazwisko'"></app-text-input>
+    <app-text-input [formControl]="$any(registerForm.controls['password'])" [label]="'Hasło'" [type]="'password'"></app-text-input>
+    <app-text-input [formControl]="$any(registerForm.controls['confirmPassword'])" [label]="'Potwierdź hasło'" [type]="'password'"></app-text-input>
+
+    <div class="row" *ngIf="validationErrors">
+        <ul class="text-danger">
+            <li *ngFor="let error of validationErrors">
+            {{error}}
+            </li>
+        </ul>
     </div>
-    <div class="mb-3">
-        <input type="text" class="form-control" name="lastName" [(ngModel)]="model.lastName" placeholder="Nazwisko">
-    </div>
-    <div class="mb-3">
-        <label>Jaką rolę ma mieć użytkownik?</label>
-        <select class="form-select">
-            <option *ngFor="let role of rolesFromHomeComponent" [value]="role.name">
-                {{role.name}}
-            </option>
-        </select>
-    </div>
-    <div class="mb-3">
-        <input type="password" class="form-control" name="password" [(ngModel)]="model.password" placeholder="Password">
-    </div>
+
     <div class="text-center">
-        <button class="btn btn-success me-2" type="submit">Zarejestruj</button>
+        <button [disabled]="!registerForm.valid" class="btn btn-success me-2" type="submit">Zarejestruj</button>
         <button class="btn btn-default" type="button" (click)="cancel()">Anuluj</button>
     </div>
 </form>
