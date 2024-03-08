@@ -21,6 +21,11 @@ namespace ContractAppAPI.Services
                 new Claim(JwtRegisteredClaimNames.NameId, user.Email)
             };
 
+            if (user.Role != null && !string.IsNullOrEmpty(user.Role.Name))
+            {
+                claims.Add(new Claim(ClaimTypes.Role, user.Role.Name));
+            }
+
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
 
             var tokenDescriptor = new SecurityTokenDescriptor

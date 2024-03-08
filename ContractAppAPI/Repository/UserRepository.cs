@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using ContractAppAPI.Data;
@@ -18,6 +19,21 @@ namespace ContractAppAPI.Repository
         {
             _context = context;
             _mapper = mapper;
+        }
+
+        public async Task<AppUser> DeleteUserAsync(int id)
+        {
+            var userToDelete = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == id);
+            
+            if (userToDelete != null)
+            {
+                _context.Users.Remove(userToDelete);
+                await _context.SaveChangesAsync();
+                return userToDelete;
+            }
+
+            return null;
         }
 
         public async Task<AppUserDto> GetAppUserAsync(string email)
@@ -62,6 +78,11 @@ namespace ContractAppAPI.Repository
         public void Update(AppUser user)
         {
             _context.Entry(user).State = EntityState.Modified;
+        }
+
+        public async Task<bool> UserExists(int id)
+        {
+            return await _context.Users.AnyAsync(u => u.Id == id);
         }
     }
 }

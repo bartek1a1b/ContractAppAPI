@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using AutoMapper;
@@ -65,6 +66,31 @@ namespace ContractAppAPI.Controllers
             {
                 if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Błędne hasło");
             }
+
+            return new UserDto
+            {
+                Email = user.Email,
+                Token = _tokenService.CreateToken(user)
+            };
+        }
+
+        [HttpPut("change-password")]
+        public async Task<ActionResult<UserDto>> ChangePassword(ChangePasswordDto changePasswordDto)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == changePasswordDto.Email);
+
+            if (user == null) 
+            {
+                return NotFound("Użytkownik nie istnieje");
+            }
+
+            using var newHmac = new HMACSHA512();
+            var newHash = newHmac.ComputeHash(Encoding.UTF8.GetBytes(changePasswordDto.NewPassword));
+
+            user.PasswordHash = newHash;
+            user.PasswordSalt = newHmac.Key;
+
+            await _context.SaveChangesAsync();
 
             return new UserDto
             {

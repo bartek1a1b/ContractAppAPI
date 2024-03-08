@@ -22,6 +22,7 @@ namespace ContractAppAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<AppUserDto>>> GetUsers()
         {
             var users = await _userRepository.GetAppUsersAsync();
@@ -34,6 +35,21 @@ namespace ContractAppAPI.Controllers
         public async Task<ActionResult<AppUserDto>> GetUser(string email)
         {
             return await _userRepository.GetAppUserAsync(email);
+        }
+
+        [HttpDelete("delete-user/{id}")]
+        public async Task<ActionResult> DeleteUserAsync(int id)
+        {
+            var userToDelete = await _userRepository.UserExists(id);
+
+            if (!userToDelete)
+            {
+                return NotFound();
+            }
+
+            await _userRepository.DeleteUserAsync(id);
+
+            return NoContent();
         }
     }
 }

@@ -25,6 +25,8 @@ import { ContractTypeTwoListComponent } from './contractType/contract-type-two-l
 import { ContractTypeOneAddComponent } from './contractType/contract-type-one-add/contract-type-one-add.component';
 import { ContractTypeTwoAddComponent } from './contractType/contract-type-two-add/contract-type-two-add.component';
 import { TextInputComponent } from './_forms/text-input/text-input.component';
+import { UsersListComponent } from './admin/users-list/users-list.component';
+import { ChangePasswordComponent } from './admin/change-password/change-password.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +46,8 @@ import { TextInputComponent } from './_forms/text-input/text-input.component';
     ContractTypeOneAddComponent,
     ContractTypeTwoAddComponent,
     TextInputComponent,
+    UsersListComponent,
+    ChangePasswordComponent,
   ],
   imports: [
     BrowserModule,

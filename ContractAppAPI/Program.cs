@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
 using ContractAppAPI;
@@ -25,6 +26,11 @@ builder.Services.AddScoped<IContractRepository, ContractRepository>();
 builder.Services.AddScoped<IContractTypeOneRepository, ContractTypeOneRepository>();
 builder.Services.AddScoped<IContractTypeTwoRepository, ContractTypeTwoRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("IsAdmin", builder => builder.RequireClaim(ClaimTypes.Role, "Admin"));
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -55,7 +61,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
 
 app.MapControllers();
 

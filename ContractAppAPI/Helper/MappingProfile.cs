@@ -22,6 +22,8 @@ namespace ContractAppAPI.Helper
                 .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Role.Name));
             CreateMap<Role, RoleDto>();
             CreateMap<RegisterDto, AppUser>();
+            CreateMap<ChangePasswordDto, AppUser>();
+            CreateMap<AppUser, ChangePasswordDto>();
         }
     }
 }

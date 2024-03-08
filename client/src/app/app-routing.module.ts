@@ -13,6 +13,8 @@ import { ContractTypeOneListComponent } from './contractType/contract-type-one-l
 import { ContractTypeTwoListComponent } from './contractType/contract-type-two-list/contract-type-two-list.component';
 import { ContractTypeOneAddComponent } from './contractType/contract-type-one-add/contract-type-one-add.component';
 import { ContractTypeTwoAddComponent } from './contractType/contract-type-two-add/contract-type-two-add.component';
+import { UsersListComponent } from './admin/users-list/users-list.component';
+import { ChangePasswordComponent } from './admin/change-password/change-password.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -20,6 +22,8 @@ const routes: Routes = [
     runGuardsAndResolvers: 'always',
     canActivate: [authGuard],
     children: [
+      {path: 'change-password', component: ChangePasswordComponent},
+      {path: 'users', component: UsersListComponent},
       {path: 'contracts', component: ContractListComponent},
       {path: 'contract/search', component: ContractSearchComponent},
       {path: 'contract/edit/:id', component: ContractEditComponent},
