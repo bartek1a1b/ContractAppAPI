@@ -4,13 +4,13 @@
 
 namespace ContractAppAPI.Migrations
 {
-    public partial class UserEmailAdd : Migration
+    public partial class AddPdfv5 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "Email",
-                table: "Users",
+                name: "FilePath",
+                table: "Pdfs",
                 type: "nvarchar(max)",
                 nullable: false,
                 defaultValue: "");
@@ -19,8 +19,8 @@ namespace ContractAppAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Email",
-                table: "Users");
+                name: "FilePath",
+                table: "Pdfs");
         }
     }
 }

@@ -21,8 +21,8 @@ namespace ContractAppAPI.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
         [Authorize(Roles = "Admin")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<AppUserDto>>> GetUsers()
         {
             var users = await _userRepository.GetAppUsersAsync();
@@ -37,6 +37,7 @@ namespace ContractAppAPI.Controllers
             return await _userRepository.GetAppUserAsync(email);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("delete-user/{id}")]
         public async Task<ActionResult> DeleteUserAsync(int id)
         {

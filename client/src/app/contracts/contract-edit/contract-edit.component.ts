@@ -28,7 +28,7 @@ export class ContractEditComponent implements OnInit {
 
   onSubmit(form: NgForm) {
     if (form.valid && this.conId !== undefined) {
-      const updatedContract = {
+      const updatedContract: Contract = {
         id: this.conId,
         contractNumber: form.value.contractNumber,
         name: form.value.name,
@@ -37,11 +37,14 @@ export class ContractEditComponent implements OnInit {
         value: form.value.value,
         contractor: form.value.contractor,
         signatory: form.value.signatory,
-        pdf: form.value.pdf,
+        hasPdf: form.value.hasPdf,
+
         typeNameOne: form.value.typeNameOne,
         typeNameTwo: form.value.typeNameTwo, 
         contractTypeOne: form.value.contractTypeOne,
-        contractTypeTwo: form.value.contractTypeTwo
+        contractTypeTwo: form.value.contractTypeTwo,
+        contractPdfs: [form.value.contractPdf],
+        annexToTheContract: [form.value.annexToTheContract]
       };
 
       const contractTypeOneId = form.value.contractTypeOne;

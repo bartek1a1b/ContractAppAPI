@@ -1,0 +1,15 @@
+<h2>Panel administratora</h2>
+<div class="tab-panel">
+    <tabset class="member-tabset">
+        <tab heading="Zarządzanie użytkownikami" *appHasRole="['Admin']">
+            <div class="container">
+                <app-user-management></app-user-management>
+            </div>
+        </tab>
+        <tab heading="Zarejestruj użytkownika" *appHasRole="['Admin']">
+            <div class="container">
+                <app-register></app-register>
+            </div>
+        </tab>
+    </tabset>
+</div>

@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AnnexToTheContract } from 'src/app/_models/annexToTheContract';
 import { Contract } from 'src/app/_models/contract';
 import { Pagination } from 'src/app/_models/pagination';
 import { ContractsService } from 'src/app/_services/contracts.service';
@@ -12,7 +13,9 @@ import { ContractsService } from 'src/app/_services/contracts.service';
 })
 export class ContractListComponent implements OnInit {
   @Input() contract: Contract | undefined;
+  @ViewChild('pdfInput') pdfInput: any;
   contracts: Contract[] = [];
+  annexToTheContract: AnnexToTheContract[] = [];
   pagination: Pagination | undefined;
   pageNumber = 1;
   pageSize = 10;
@@ -24,15 +27,44 @@ export class ContractListComponent implements OnInit {
     this.loadContracts();
   }
 
+  // loadContracts() {
+  //   this.contractService.getContracts(this.pageNumber, this.pageSize).subscribe({
+  //     next: response => {
+  //       if (response.result && response.pagination) {
+  //         this.contracts = response.result;
+  //         this.pagination = response.pagination;
+  //       }
+  //     }
+  //   })
+  // }
+
   loadContracts() {
     this.contractService.getContracts(this.pageNumber, this.pageSize).subscribe({
       next: response => {
         if (response.result && response.pagination) {
           this.contracts = response.result;
           this.pagination = response.pagination;
+  
+          this.contracts.forEach(contract => {
+            if (contract.contractPdfs) { // Sprawdź, czy contractPdfs istnieje
+              contract.hasPdf = contract.contractPdfs.length > 0; // Sprawdź, czy istnieją pliki PDF
+            }
+          });
         }
       }
     })
+  }
+
+  loadAnnexes(contractId: number) {
+    this.contractService.getAnnexByContract(contractId).subscribe({
+      next: annexes => {
+        // Przypisz pobrane aneksy do odpowiedniego kontraktu na podstawie jego ID
+        const contract = this.contracts.find(c => c.id === contractId);
+        if (contract) {
+          contract.annexToTheContract = annexes;
+        }
+      }
+    });
   }
 
   deleteContract(conId: number) {
@@ -45,6 +77,28 @@ export class ContractListComponent implements OnInit {
       complete: () => {
         this.loadContracts();
       }
+    });
+  }
+
+  onFileSelected(event: any, contractId: number): void {
+    const file: File = event.target.files[0];
+    if (file) {
+        this.contractService.uploadPdf(file, contractId).subscribe(() => {
+            // Aktualizuj listę umów po dodaniu pliku PDF
+            this.loadContracts();
+        });
+    }
+}
+
+  downloadPdf(contractId: number): void {
+    this.contractService.downloadContractPdf(contractId).subscribe(response => {
+      const blob = new Blob([response], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = `kontrakt_${contractId}.pdf`;
+      anchor.click();
+      window.URL.revokeObjectURL(url);
     });
   }
 

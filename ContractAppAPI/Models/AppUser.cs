@@ -1,14 +1,11 @@
-﻿namespace ContractAppAPI.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace ContractAppAPI.Models
 {
-    public class AppUser
+    public class AppUser : IdentityUser<int>
     {
-        public int Id { get; set; }
-        public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public byte[] PasswordHash { get; set; }
-        public byte[] PasswordSalt { get; set; }
-        public int RoleId { get; set; }
-        public virtual Role Role { get; set; }
+        public ICollection<AppUserRole> UserRoles { get; set; }
     }
 }

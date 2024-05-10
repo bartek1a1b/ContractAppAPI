@@ -1,5 +1,7 @@
 import { ContractTypeOne } from "./contractTypeOne"
 import { ContractTypeTwo } from "./contractTypeTwo"
+import { ContractPdf } from "./contractPdf"
+import { AnnexToTheContract } from "./annexToTheContract"
 
 
 export interface Contract {
@@ -13,7 +15,10 @@ export interface Contract {
     value: number
     contractor: string
     signatory: string
-    pdf: string
+    hasPdf: boolean
+
     contractTypeOne: ContractTypeOne
     contractTypeTwo: ContractTypeTwo
+    contractPdfs: ContractPdf[]
+    annexToTheContract: AnnexToTheContract[]
   }

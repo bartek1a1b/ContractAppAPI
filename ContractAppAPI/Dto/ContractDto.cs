@@ -14,7 +14,8 @@ namespace ContractAppAPI.Dto
         public decimal Value { get; set; }
         public string Contractor { get; set; }
         public string Signatory { get; set; }
-        public string Pdf { get; set; }
+        public Boolean HasPdf { get; set; }
+        //public string Pdf { get; set; }
         public ContractTypeOneDto ContractTypeOne { get; set; }
         public ContractTypeTwoDto ContractTypeTwo { get; set; }
     }

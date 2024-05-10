@@ -5,6 +5,7 @@ using ContractAppAPI.Extensions;
 using ContractAppAPI.Helper;
 using ContractAppAPI.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Hosting;
 
 namespace ContractAppAPI.Controllers
 {
@@ -17,15 +18,17 @@ namespace ContractAppAPI.Controllers
         private readonly IContractTypeTwoRepository _contractTypeTwoRepository;
         private readonly DataContext _context;
         private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
         public ContractController(IContractRepository contractRepository, IContractTypeOneRepository contractTypeOneRepository, 
-            IContractTypeTwoRepository contractTypeTwoRepository, DataContext context, IMapper mapper)
+            IContractTypeTwoRepository contractTypeTwoRepository, DataContext context, IMapper mapper, IWebHostEnvironment webHostEnvironment)
         {
             _contractRepository = contractRepository;
             _contractTypeOneRepository = contractTypeOneRepository;
             _contractTypeTwoRepository = contractTypeTwoRepository;
             _context = context;
             _mapper = mapper;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet("search")]
@@ -100,6 +103,26 @@ namespace ContractAppAPI.Controllers
             }
 
             return Ok(contract);
+        }
+
+        [HttpGet("{contractId}/annexes")]
+        [ProducesResponseType(200, Type = typeof(ContractAppAPI.Models.Contract))]
+        [ProducesResponseType(400)]
+        public IActionResult GetAnnexByContract(int contractId)
+        {
+            if (!_contractRepository.ContractExists(contractId))
+            {
+                return NotFound();
+            }
+
+            var annexes = _mapper.Map<List<AnnexToTheContractDto>>(_contractRepository.GetAnnexByContract(contractId));
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Ok(annexes);
         }
 
         [HttpPost]
@@ -195,7 +218,6 @@ namespace ContractAppAPI.Controllers
             }
 
             return NoContent();
-
         }
     }
 }

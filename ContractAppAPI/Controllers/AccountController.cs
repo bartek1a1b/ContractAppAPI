@@ -6,6 +6,7 @@ using ContractAppAPI.Data;
 using ContractAppAPI.Dto;
 using ContractAppAPI.Interfaces;
 using ContractAppAPI.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,13 +14,13 @@ namespace ContractAppAPI.Controllers
 {
     public class AccountController : BaseApiController
     {
-        private readonly DataContext _context;
+        private readonly UserManager<AppUser> _userManager;
         private readonly ITokenService _tokenService;
         private readonly IMapper _mapper;
 
-        public AccountController(DataContext context, ITokenService tokenService, IMapper mapper)
+        public AccountController(UserManager<AppUser> userManager, ITokenService tokenService, IMapper mapper)
         {
-            _context = context;
+            _userManager = userManager;
             _tokenService = tokenService;
             _mapper = mapper;
         }
@@ -27,81 +28,79 @@ namespace ContractAppAPI.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
-            if (await UserExists(registerDto.Email)) return BadRequest("Email jest zajęty");
+            if (await UserExists(registerDto.UserName)) return BadRequest("Email jest zajęty");
 
             var user = _mapper.Map<AppUser>(registerDto);
 
-            using var hmac = new HMACSHA512();
-
             user.Email = registerDto.Email;
+            user.UserName = registerDto.UserName;
             user.FirstName = registerDto.FirstName;
             user.LastName = registerDto.LastName;
-            user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password));
-            user.PasswordSalt = hmac.Key;
-            user.RoleId = registerDto.RoleId;
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            var result = await _userManager.CreateAsync(user, registerDto.Password);
+
+            if (!result.Succeeded) return BadRequest(result.Errors);
+
+            var roleResult = await _userManager.AddToRoleAsync(user, "Reader");
+
+            if (!roleResult.Succeeded) return BadRequest(result.Errors);
 
             return new UserDto
             {
                 Email = user.Email,
-                Token = _tokenService.CreateToken(user)
+                UserName = user.UserName,
+                Token = await _tokenService.CreateToken(user)
             };
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
-            var user = await _context.Users.SingleOrDefaultAsync(u =>
-                u.Email == loginDto.Email);
+            var user = await _userManager.Users.SingleOrDefaultAsync(u =>
+                u.UserName == loginDto.UserName);
 
             if (user == null) return Unauthorized("Błędny adres email");
 
-            using var hmac = new HMACSHA512(user.PasswordSalt);
+            var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
 
-            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
-
-            for (int i = 0; i < computedHash.Length; i++)
-            {
-                if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Błędne hasło");
-            }
+            if (!result) return Unauthorized("Błędne hasło");
 
             return new UserDto
             {
                 Email = user.Email,
-                Token = _tokenService.CreateToken(user)
+                UserName = user.UserName,
+                Token = await _tokenService.CreateToken(user)
             };
         }
 
-        [HttpPut("change-password")]
-        public async Task<ActionResult<UserDto>> ChangePassword(ChangePasswordDto changePasswordDto)
-        {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == changePasswordDto.Email);
+        // [HttpPut("change-password")]
+        // public async Task<ActionResult<UserDto>> ChangePassword(ChangePasswordDto changePasswordDto)
+        // {
+        //     var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == changePasswordDto.Email);
 
-            if (user == null) 
-            {
-                return NotFound("Użytkownik nie istnieje");
-            }
+        //     if (user == null) 
+        //     {
+        //         return NotFound("Użytkownik nie istnieje");
+        //     }
 
-            using var newHmac = new HMACSHA512();
-            var newHash = newHmac.ComputeHash(Encoding.UTF8.GetBytes(changePasswordDto.NewPassword));
+        //     using var newHmac = new HMACSHA512();
+        //     var newHash = newHmac.ComputeHash(Encoding.UTF8.GetBytes(changePasswordDto.NewPassword));
 
-            user.PasswordHash = newHash;
-            user.PasswordSalt = newHmac.Key;
+        //     // user.PasswordHash = newHash;
+        //     // user.PasswordSalt = newHmac.Key;
 
-            await _context.SaveChangesAsync();
+        //     await _context.SaveChangesAsync();
 
-            return new UserDto
-            {
-                Email = user.Email,
-                Token = _tokenService.CreateToken(user)
-            };
-        }
+        //     return new UserDto
+        //     {
+        //         Email = user.Email,
+        //         Token = _tokenService.CreateToken(user)
+        //     };
+        // }
 
         private async Task<bool> UserExists(string email)
         {
-            return await _context.Users.AnyAsync(u => u.Email == email);
+            return await _userManager.Users.AnyAsync(u => u.Email == email);
         }
     }
 }

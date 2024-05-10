@@ -15,6 +15,10 @@ import { ContractTypeOneAddComponent } from './contractType/contract-type-one-ad
 import { ContractTypeTwoAddComponent } from './contractType/contract-type-two-add/contract-type-two-add.component';
 import { UsersListComponent } from './admin/users-list/users-list.component';
 import { ChangePasswordComponent } from './admin/change-password/change-password.component';
+import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
+import { adminGuard } from './_guards/admin.guard';
+import { AnnexesListComponent } from './annexes/annexes-list/annexes-list.component';
+import { AnnexAddComponent } from './annexes/annex-add/annex-add.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -32,6 +36,10 @@ const routes: Routes = [
       {path: 'add-contractTypeOne', component: ContractTypeOneAddComponent},
       {path: 'add-contractTypeTwo', component: ContractTypeTwoAddComponent},
       {path: 'contractTypeTwos', component: ContractTypeTwoListComponent},
+      {path: 'annexes', component: AnnexesListComponent},
+      {path: 'annexByContract/:contractId', component: AnnexesListComponent},
+      {path: 'add-annex', component: AnnexAddComponent},
+      {path: 'admin', component: AdminPanelComponent, canActivate: [adminGuard]},
     ]},
     {path: 'errors', component: TestErrorComponent},
     {path: 'not-found', component: NotFoundComponent},

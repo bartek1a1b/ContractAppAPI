@@ -18,9 +18,18 @@ namespace ContractAppAPI.Helper
             CreateMap<ContractTypeOneDto, ContractTypeOne>();
             CreateMap<ContractTypeTwo, ContractTypeTwoDto>();
             CreateMap<ContractTypeTwoDto, ContractTypeTwo>();
-            CreateMap<AppUser, AppUserDto>()
-                .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Role.Name));
-            CreateMap<Role, RoleDto>();
+            CreateMap<AnnexToTheContract, AnnexToTheContractDto>()
+                .ForMember(dest => dest.ContractNumber, opt => opt.MapFrom(src => src.Contract.ContractNumber));
+            CreateMap<AnnexToTheContractDto, AnnexToTheContract>();
+            CreateMap<AnnexToTheContract, AnnexToTheContractAddDto>();
+            CreateMap<AnnexToTheContractAddDto, AnnexToTheContract>();
+            CreateMap<ContractPdf, ContractPdfDto>();
+            CreateMap<ContractPdfDto, ContractPdf>();
+            CreateMap<Pdf, PdfDto>();
+            CreateMap<PdfDto, PdfDto>();
+            CreateMap<AppUser, AppUserDto>();
+            //     .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Role.Name));
+            // CreateMap<Role, RoleDto>();
             CreateMap<RegisterDto, AppUser>();
             CreateMap<ChangePasswordDto, AppUser>();
             CreateMap<AppUser, ChangePasswordDto>();

@@ -16,13 +16,16 @@
             <li class="nav-item">
               <a class="nav-link" routerLink="/contractTypeTwos" routerLinkActive="active">Typy 2</a>
             </li>
+            <li *appHasRole="['Admin']" class="nav-item">
+              <a class="nav-link" routerLink="/admin" routerLinkActive="active">Admin</a>
+            </li>
           </ng-container>
           <li class="nav-item">
             <a class="nav-link" routerLink="/errors" routerLinkActive="active">Errors</a>
           </li>
         </ul>
 
-        <div class="dropdown" *ngIf="accountService.currentUser$ | async as user" dropdown>
+        <div class="dropdown" *ngIf="(accountService.currentUser$ | async) as user" dropdown>
             <a class="dropdown-toggle text-light text-decoration-none" dropdownToggle>Witaj {{user.email | titlecase}}</a>
             <div class="dropdown-menu" *dropdownMenu="">
                 <a class="dropdown-item">Pokaż profil</a>
@@ -31,7 +34,7 @@
         </div>
 
         <form *ngIf="!(accountService.currentUser$ | async)" #loginForm="ngForm" class="d-flex" (ngSubmit)="login()" autocomplete="off">
-          <input name="email" [(ngModel)]="model.email" class="form-control me-2" type="text" placeholder="Email">
+          <input name="userName" [(ngModel)]="model.userName" class="form-control me-2" type="text" placeholder="Email">
           <input name="password" [(ngModel)]="model.password" class="form-control me-2" type="password" placeholder="Hasło">
           <button class="btn btn-secondary" type="submit">Zaloguj</button>
         </form>

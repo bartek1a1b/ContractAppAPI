@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { Contract } from '../_models/contract';
 import { Observable, catchError, map, of, throwError } from 'rxjs';
 import { PaginatedResult } from '../_models/pagination';
+import { AnnexToTheContract } from '../_models/annexToTheContract';
 
 @Injectable({
   providedIn: 'root'
@@ -51,6 +52,10 @@ export class ContractsService {
     return this.http.get<Contract[]>(url);
   }
 
+  getAnnexByContract(contractId: number): Observable<AnnexToTheContract[]> {
+    return this.http.get<AnnexToTheContract[]>(`${this.baseUrl}Contract/${contractId}/annexes`);
+  }
+
   updateContract(conId: number, contractTypeOneId: number, contractTypeTwoId: number, updatedContract: Contract) {
     const url = `${this.baseUrl}contract/update/${conId}?contractTypeOneId=${contractTypeOneId}&contractTypeTwoId=${contractTypeTwoId}`;
     return this.http.put(url, updatedContract, {responseType: 'text'});
@@ -58,6 +63,17 @@ export class ContractsService {
 
   deleteContract(conId: number) {
     return this.http.delete(this.baseUrl + 'contract/delete-contract/' + conId);
+  }
+
+  downloadContractPdf(contractId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}ContractPdf/get-contractPdfByContractId?contractId=${contractId}`, { responseType: 'blob' });
+  }
+
+  uploadPdf(file: File, contractId: number): Observable<any> {
+    const formData: FormData = new FormData();
+    formData.append('file', file, file.name);
+    formData.append('contractId', contractId.toString());
+    return this.http.post(`${this.baseUrl}ContractPdf`, formData);
   }
 
 }

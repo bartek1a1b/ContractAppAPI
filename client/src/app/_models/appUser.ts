@@ -1,11 +1,8 @@
-import { Role } from "./role"
-
 
 export interface AppUser {
     id: number
     email: string
+    userName: string
     firstName: string
     lastName: string
-    roleName: string
-    role: Role
   }

@@ -6,9 +6,11 @@ using ContractAppAPI.Data;
 using ContractAppAPI.Extensions;
 using ContractAppAPI.Interfaces;
 using ContractAppAPI.Middleware;
+using ContractAppAPI.Models;
 using ContractAppAPI.Repository;
 using ContractAppAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -26,10 +28,7 @@ builder.Services.AddScoped<IContractRepository, ContractRepository>();
 builder.Services.AddScoped<IContractTypeOneRepository, ContractTypeOneRepository>();
 builder.Services.AddScoped<IContractTypeTwoRepository, ContractTypeTwoRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("IsAdmin", builder => builder.RequireClaim(ClaimTypes.Role, "Admin"));
-});
+builder.Services.AddScoped<IAnnexToTheContractRepository, AnnexToTheContractRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -43,16 +42,16 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 app.UseMiddleware<ExceptionMiddleware>();
 
+app.UseStaticFiles();
 app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-var scope = app.Services.CreateScope();
-var seeder = scope.ServiceProvider.GetRequiredService<Seeder>();
+//var scope = app.Services.CreateScope();
+//var seeder = scope.ServiceProvider.GetRequiredService<Seeder>();
 
-seeder.SeedDataContext();
-
+//seeder.SeedDataContext();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -63,5 +62,21 @@ app.UseHttpsRedirection();
 
 
 app.MapControllers();
+
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+try
+{
+    var context = services.GetRequiredService<DataContext>();
+    var userManager = services.GetRequiredService<UserManager<AppUser>>();
+    var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
+    await context.Database.MigrateAsync();
+    await Seed.SeedUsers(userManager, roleManager);
+}
+catch (Exception ex)
+{
+    var logger = services.GetService<ILogger<Program>>();
+    logger.LogError(ex, "An error occured during migration");
+}
 
 app.Run();

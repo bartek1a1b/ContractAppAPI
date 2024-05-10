@@ -1,0 +1,41 @@
+<div class="container my-5">
+    <h1 class="mb-3">Dodaj aneks do umowy</h1>
+
+    <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+      <div class="mb-3">
+        <label for="contractId">Nr id kontraktu</label>
+        <input type="number" class="form-control" id="contractId" name="contractId" ngModel placeholder="Id kontraktu" required>
+      </div>
+        <div class="mb-3">
+            <label for="contractNumber">Numer aneksu</label>
+            <input type="number" class="form-control" id="annexNumber" name="annexNumber" ngModel placeholder="Numer aneksu" required>
+          </div>
+          <div class="mb-3">
+            <label for="name">Nazwa</label>
+            <input type="text" class="form-control" id="name" name="name" ngModel placeholder="Nazwa" required>
+          </div>
+          <div class="mb-3">
+            <label for="description">Opis</label>
+            <input type="text" class="form-control" id="description" name="description" ngModel placeholder="Opis" required>
+          </div>
+          <div class="mb-3">
+          <div class="mb-3">
+            <label for="dateOfConclusion">Data zawarcia</label>
+            <input type="datetime" class="form-control" id="dateOfConclusion" name="dateOfConclusion" ngModel placeholder="Data zawarcia" required>
+          </div>
+          <div class="mb-3">
+            <label for="contractor">Kontraktor</label>
+            <input type="text" class="form-control" id="contractor" name="contractor" ngModel placeholder="Kontraktor" required>
+          </div>
+          <div class="mb-3">
+            <label for="signatory">Sygnatariusz</label>
+            <input type="text" class="form-control" id="signatory" name="signatory" ngModel placeholder="Sygnatariusz" required>
+          </div>
+          <div class="mb-3">
+            <label for="pdf">PDF</label>
+            <input type="text" class="form-control" id="pdf" name="pdf" ngModel placeholder="PDF" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Dodaj</button>
+        </div>
+    </form>
+</div>

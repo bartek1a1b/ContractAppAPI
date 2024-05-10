@@ -3,6 +3,10 @@ import { ContractsService } from '../_services/contracts.service';
 import { NgForm } from '@angular/forms';
 import { catchError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { ContractTypeOneService } from '../_services/contract-type-one.service';
+import { ContractTypeOne } from '../_models/contractTypeOne';
+import { ContractTypeTwoService } from '../_services/contract-type-two.service';
+import { ContractTypeTwo } from '../_models/contractTypeTwo';
 
 
 @Component({
@@ -11,10 +15,37 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./add.component.css']
 })
 export class AddComponent implements OnInit {
+  contractTypeOne: ContractTypeOne[] = [];
+  contractTypeTwo: ContractTypeTwo[] = [];
 
-  constructor(private contractService: ContractsService, private toastr: ToastrService) { }
+  constructor(private contractService: ContractsService, private contractTypeOneService: ContractTypeOneService, 
+    private contractTypeTwoService: ContractTypeTwoService, private toastr: ToastrService) { }
 
   ngOnInit(): void {
+    this.loadContractTypeOne();
+    this.loadContractTypeTwo();
+  }
+  
+  loadContractTypeOne() {
+    this.contractTypeOneService.getContractTypeOnes().subscribe({
+      next: (types: ContractTypeOne[]) => {
+        this.contractTypeOne = types;
+      },
+      error: (error) => {
+        console.error("Błąd podczas pobierania typów kontraktów: ", error);
+      }
+    });
+  }
+
+  loadContractTypeTwo() {
+    this.contractTypeTwoService.GetContractTypeTwos().subscribe({
+      next: (types: ContractTypeTwo[]) => {
+        this.contractTypeTwo = types;
+      },
+      error: (error) => {
+        console.error("Błąd podczas pobierania typów kontraktów: ", error);
+      }
+    });
   }
 
   onSubmit(form: NgForm) {
@@ -27,7 +58,7 @@ export class AddComponent implements OnInit {
         value: form.value.value,
         contractor: form.value.contractor,
         signatory: form.value.signatory,
-        pdf: form.value.pdf
+        hasPdf: form.value.hasPdf,
       };
 
       const contractTypeOneId = form.value.contractTypeOne;
@@ -42,7 +73,7 @@ export class AddComponent implements OnInit {
         },
         error: error => {
           this.toastr.error(error.error);
-          console.error('Błąd podczas dodawania umowy:', error);
+          console.error('Błąd podczas dodawania umowy: ', error);
         }
       });
     }

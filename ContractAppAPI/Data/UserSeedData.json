@@ -1,0 +1,32 @@
+[
+    {
+      "Email": "Merle0@example.com",
+      "UserName": "MasseyMejia",
+      "FirstName": "Massey",
+      "LastName": "Mejia"
+    },
+    {
+      "Email": "Meyers1@example.com",
+      "UserName": "BlackRollins",
+      "FirstName": "Black",
+      "LastName": "Rollins"
+    },
+    {
+      "Email": "Rosetta2@example.com",
+      "UserName": "FosterWolfe",
+      "FirstName": "Foster",
+      "LastName": "Wolfe"
+    },
+    {
+      "Email": "Bryant3@example.com",
+      "UserName": "BeckerTrevino",
+      "FirstName": "Becker",
+      "LastName": "Trevino"
+    },
+    {
+      "Email": "Marshall4@example.com",
+      "UserName": "SofiaRogers",
+      "FirstName": "Sofia",
+      "LastName": "Rogers"
+    }
+  ]

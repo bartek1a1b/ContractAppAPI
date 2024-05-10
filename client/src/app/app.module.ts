@@ -27,6 +27,13 @@ import { ContractTypeTwoAddComponent } from './contractType/contract-type-two-ad
 import { TextInputComponent } from './_forms/text-input/text-input.component';
 import { UsersListComponent } from './admin/users-list/users-list.component';
 import { ChangePasswordComponent } from './admin/change-password/change-password.component';
+import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
+import { HasRoleDirective } from './_directives/has-role.directive';
+import { UserManagementComponent } from './admin/user-management/user-management.component';
+import { TabsModule} from 'ngx-bootstrap/tabs';
+import { RolesModalComponent } from './modals/roles-modal/roles-modal.component';
+import { AnnexesListComponent } from './annexes/annexes-list/annexes-list.component';
+import { AnnexAddComponent } from './annexes/annex-add/annex-add.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +55,12 @@ import { ChangePasswordComponent } from './admin/change-password/change-password
     TextInputComponent,
     UsersListComponent,
     ChangePasswordComponent,
+    AdminPanelComponent,
+    HasRoleDirective,
+    UserManagementComponent,
+    RolesModalComponent,
+    AnnexesListComponent,
+    AnnexAddComponent,
   ],
   imports: [
     BrowserModule,
@@ -57,7 +70,8 @@ import { ChangePasswordComponent } from './admin/change-password/change-password
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TabsModule.forRoot()
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},

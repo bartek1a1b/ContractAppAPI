@@ -1,7 +1,7 @@
 <form [formGroup]="registerForm" (ngSubmit)="registerForm.valid && register()" autocomplete="off">
     <h2 class="text-center text-primary">Zarejestruj</h2>
     <hr>
-    <div class="mb-3">
+    <!-- <div class="mb-3">
         <label style="margin-right: 10px;">Rola: </label>
         <label class="form-check-label">
             <input type="radio" class="form-check-label" value="3" formControlName="roleId"> Admin
@@ -12,8 +12,9 @@
         <label class="form-check-label">
             <input type="radio" class="form-check-label ms-3" value="1" formControlName="roleId"> Przeglądający
         </label>
-    </div>
+    </div> -->
     <app-text-input [formControl]="$any(registerForm.controls['email'])" [label]="'Email'" [type]="'email'"></app-text-input>
+    <app-text-input [formControl]="$any(registerForm.controls['userName'])" [label]="'Nazwa użytkownika'"></app-text-input>
     <app-text-input [formControl]="$any(registerForm.controls['firstName'])" [label]="'Imię'"></app-text-input>
     <app-text-input [formControl]="$any(registerForm.controls['lastName'])" [label]="'Nazwisko'"></app-text-input>
     <app-text-input [formControl]="$any(registerForm.controls['password'])" [label]="'Hasło'" [type]="'password'"></app-text-input>

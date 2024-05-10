@@ -14,13 +14,25 @@
             <label for="description">Opis</label>
             <input type="text" class="form-control" id="description" name="description" ngModel placeholder="Opis" required>
           </div>
-          <div class="mb-3">
+          <!-- <div class="mb-3">
             <label for="contractTypeOne">Typ 1</label>
             <input type="number" class="form-control" id="contractTypeOne" name="contractTypeOne" ngModel placeholder="Typ 1" required>
-          </div>
+          </div> -->
           <div class="mb-3">
+            <label for="contractTypeOne">Typ 1</label>
+            <select class="form-control" id="contractTypeOne" name="contractTypeOne" ngModel required>
+                <option *ngFor="let type of contractTypeOne" [value]="type.id">{{ type.name }}</option>
+            </select>
+          </div>
+          <!-- <div class="mb-3">
             <label for="contractTypeTwo">Typ 2</label>
             <input type="number" class="form-control" id="contractTypeTwo" name="contractTypeTwo" ngModel placeholder="Typ 2" required>
+          </div> -->
+          <div class="mb-3">
+            <label for="contractTypeTwo">Typ 2</label>
+            <select class="form-control" id="contractTypeTwo" name="contractTypeTwo" ngModel required>
+                <option *ngFor="let type of contractTypeTwo" [value]="type.id">{{ type.name }}</option>
+            </select>
           </div>
           <div class="mb-3">
             <label for="dateOfConclusion">Data zawarcia</label>
@@ -38,10 +50,14 @@
             <label for="signatory">Sygnatariusz</label>
             <input type="text" class="form-control" id="signatory" name="signatory" ngModel placeholder="Sygnatariusz" required>
           </div>
-          <div class="mb-3">
+          <!--<div class="mb-3">
             <label for="pdf">PDF</label>
             <input type="text" class="form-control" id="pdf" name="pdf" ngModel placeholder="PDF" required>
-          </div>
+          </div>-->
+          <!-- <div class="mb-3">
+            <label for="pdf">PDF</label>
+            <input type="file" class="form-control" id="pdf" name="pdf" ngModel placeholder="PDF" onchange="console.log(event.target.files)" required>
+          </div> -->
           <button type="submit" class="btn btn-primary">Dodaj</button>
     </form>
 </div>

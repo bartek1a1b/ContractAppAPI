@@ -54,7 +54,7 @@ namespace ContractAppAPI.Repository
         public async Task<AppUser> GetUserByEmailAsync(string email)
         {
             return await _context.Users
-                .Include(r => r.Role)
+                // .Include(r => r.Role)
                 .SingleOrDefaultAsync(u => u.Email == email);
         }
 
@@ -66,7 +66,7 @@ namespace ContractAppAPI.Repository
         public async Task<IEnumerable<AppUser>> GetUsersAsync()
         {
             return await _context.Users
-                .Include(r => r.Role)
+                // .Include(r => r.Role)
                 .ToListAsync();
         }
 

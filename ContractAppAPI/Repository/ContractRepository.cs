@@ -106,5 +106,9 @@ namespace ContractAppAPI.Repository
             return Save();
         }
 
+        public ICollection<AnnexToTheContract> GetAnnexByContract(int contractId)
+        {
+            return _context.AnnexToTheContracts.Where(a => a.Contract.Id == contractId).ToList();
+        }
     }
 }

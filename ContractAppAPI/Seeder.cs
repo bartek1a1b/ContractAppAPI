@@ -35,7 +35,8 @@ namespace ContractAppAPI
                         Value = 1200,
                         Contractor = "Jan Nowak",
                         Signatory = "Jan Kowalski",
-                        Pdf = "Link",
+                        HasPdf = false,
+                        //Pdf = "Link",
                         ContractTypeOne = new ContractTypeOne()
                         {
                             Name = "Umowa unijna"
@@ -54,7 +55,8 @@ namespace ContractAppAPI
                         Value = 1300,
                         Contractor = "Jan Nowak",
                         Signatory = "Jan Kowalski",
-                        Pdf = "Link",
+                        HasPdf = false,
+                        //Pdf = "Link",
                         ContractTypeOne = new ContractTypeOne()
                         {
                             Name = "Umowa projekt x power"

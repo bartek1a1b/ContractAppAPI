@@ -23,7 +23,9 @@
                     <th>Wartość</th>
                     <th>Kontraktor</th>
                     <th>Sygnatariusz</th>
-                    <th>PDF</th>
+                    <th>Dodaj PDF</th>
+                    <th></th>
+                    <th></th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -40,9 +42,14 @@
                     <td>{{contract.value}}</td>
                     <td>{{contract.contractor}}</td>
                     <td>{{contract.signatory}}</td>
-                    <td>{{contract.pdf}}</td>
+                    <td>
+                        <input type="file" #fileInput style="display: none" (change)="onFileSelected($event, contract.id)">
+                        <button class="btn btn-secondary" (click)="fileInput.click()">Dodaj PDF</button>
+                    </td>
+                    <td><button class="btn btn-primary" (click)="downloadPdf(contract.id)" [disabled]="!contract.hasPdf">PDF</button></td>
                     <td><button class="btn btn-success" routerLink="/contract/edit/{{contract.id}}">Edytuj</button></td>
                     <td><button class="btn btn-danger" (click)="deleteContract(contract.id)">Usuń</button></td>
+                    <td><button class="btn btn-outline-warning" [routerLink]="['/annexByContract', contract.id]">Aneksy</button></td>
                 </tr>
             </tbody>
         </table>

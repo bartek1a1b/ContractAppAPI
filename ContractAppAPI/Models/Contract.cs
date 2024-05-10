@@ -10,8 +10,10 @@
         public decimal Value { get; set; }
         public string Contractor { get; set; }
         public string Signatory { get; set; }
-        public string Pdf { get; set; }
+        public Boolean HasPdf { get; set; } = false;
         public ContractTypeOne ContractTypeOne { get; set; }
         public ContractTypeTwo ContractTypeTwo { get; set; }
+        public ICollection<ContractPdf> ContractPdfs { get; set; }
+        public ICollection<AnnexToTheContract> AnnexToTheContracts { get; set; }
     }
 }

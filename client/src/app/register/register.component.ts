@@ -24,9 +24,10 @@ export class RegisterComponent implements OnInit {
   initializeForm() {
     this.registerForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
+      userName: ['', Validators.required],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      roleId: ['', Validators.required],
+      //roleId: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16)]],
       confirmPassword: ['', [Validators.required, this.matchValues('password')]],
     });
@@ -44,7 +45,8 @@ export class RegisterComponent implements OnInit {
   register() {
      this.accountService.register(this.registerForm.value).subscribe({
       next: () => {
-        this.router.navigateByUrl('/users')
+        this.router.navigateByUrl('/admin')
+        this.toastr.success('Dodano nowego użytkownika')
       },
       error: error => {
         this.validationErrors = error

@@ -9,6 +9,7 @@ namespace ContractAppAPI.Interfaces
         Task<PagedList<ContractDto>> GetContractsDtosAsync(UserParams userParams, string searchPhrase);
         Task<ICollection<Contract>> GetContractsAsync();
         Task<PagedList<Contract>> GetContractsAsync(UserParams userParams);
+        ICollection<AnnexToTheContract> GetAnnexByContract(int contractId);
         Contract GetContract(int id);
         Contract GetContract(string name);
         bool ContractExists(int conId);
