@@ -3,6 +3,7 @@ using ContractAppAPI.Data;
 using ContractAppAPI.Dto;
 using ContractAppAPI.Interfaces;
 using ContractAppAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ContractAppAPI.Controllers
@@ -58,6 +59,7 @@ namespace ContractAppAPI.Controllers
             return Ok(annexToTheContract);
         }
 
+        [Authorize(Policy = "RequireWriterRole")]
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -96,6 +98,7 @@ namespace ContractAppAPI.Controllers
             return Ok("Pomyślnie dodano aneks");
         }
 
+        [Authorize(Policy = "RequireAdminRole")]
         [HttpDelete("delete-annexToTheContract/{annexId}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]

@@ -3,52 +3,61 @@
   <div class="d-grid gap-2 d-md-flex justify-content-md-end">
     <button class="btn btn-warning" routerLink="/contracts" routerLinkActive="active">Powrót</button>
   </div>
-  <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+  <!-- <form #form="ngForm" (ngSubmit)="onSubmit(form)"> -->
+  <form [formGroup]="contractForm" (ngSubmit)="onSubmit()">
     <div class="mb-3">
       <label for="contractNumber">Numer umowy</label>
-      <input type="number" class="form-control" id="contractNumber" name="contractNumber" ngModel
+      <input type="number" class="form-control" id="contractNumber" name="contractNumber" formControlName="contractNumber"
         placeholder="Numer umowy" required>
     </div>
     <div class="mb-3">
       <label for="name">Name</label>
-      <input type="text" class="form-control" id="name" name="name" ngModel placeholder="Nazwa" required>
+      <input type="text" class="form-control" id="name" name="name" formControlName="name" placeholder="Nazwa" required>
     </div>
     <div class="mb-3">
       <label for="description">Opis</label>
-      <input type="text" class="form-control" id="description" name="description" ngModel placeholder="Opis" required>
+      <input type="text" class="form-control" id="description" name="description" formControlName="description" placeholder="Opis" required>
     </div>
+    <!-- <div class="mb-3">
+      <label for="contractTypeOne">Typ 1</label>
+      <input type="number" class="form-control" id="contractTypeOne" name="contractTypeOne" formControlName="contractTypeOne" placeholder="Typ 1"
+        required>
+    </div> -->
     <div class="mb-3">
       <label for="contractTypeOne">Typ 1</label>
-      <input type="number" class="form-control" id="contractTypeOne" name="contractTypeOne" ngModel placeholder="Typ 1"
-        required>
+      <select class="form-control" id="contractTypeOne" name="contractTypeOne" formControlName="contractTypeOne" required>
+          <option *ngFor="let type of contractTypeOne" [value]="type.id">{{ type.name }}</option>
+      </select>
     </div>
+    <!-- <div class="mb-3">
+      <label for="contractTypeTwo">Typ 2</label>
+      <input type="number" class="form-control" id="contractTypeTwo" name="contractTypeTwo" formControlName="contractTypeTwo" placeholder="Typ 2"
+        required>
+    </div> -->
     <div class="mb-3">
       <label for="contractTypeTwo">Typ 2</label>
-      <input type="number" class="form-control" id="contractTypeTwo" name="contractTypeTwo" ngModel placeholder="Typ 2"
-        required>
+      <select class="form-control" id="contractTypeTwo" name="contractTypeTwo" formControlName="contractTypeTwo" required>
+          <option *ngFor="let type of contractTypeTwo" [value]="type.id">{{ type.name }}</option>
+      </select>
     </div>
     <div class="mb-3">
       <label for="dateOfConclusion">Data zawarcia</label>
-      <input type="datetime" class="form-control" id="dateOfConclusion" name="dateOfConclusion" ngModel
+      <input type="date" class="form-control" id="dateOfConclusion" name="dateOfConclusion" formControlName="dateOfConclusion"
         placeholder="Data zawarcia" required>
     </div>
     <div class="mb-3">
       <label for="value">Wartość</label>
-      <input type="number" class="form-control" id="value" name="value" ngModel placeholder="Wartość" required>
+      <input type="number" class="form-control" id="value" name="value" formControlName="value" placeholder="Wartość" required>
     </div>
     <div class="mb-3">
       <label for="contractor">Kontraktor</label>
-      <input type="text" class="form-control" id="contractor" name="contractor" ngModel placeholder="Kontraktor"
+      <input type="text" class="form-control" id="contractor" name="contractor" formControlName="contractor" placeholder="Kontraktor"
         required>
     </div>
     <div class="mb-3">
       <label for="signatory">Sygnatariusz</label>
-      <input type="text" class="form-control" id="signatory" name="signatory" ngModel placeholder="Sygnatariusz"
+      <input type="text" class="form-control" id="signatory" name="signatory" formControlName="signatory" placeholder="Sygnatariusz"
         required>
-    </div>
-    <div class="mb-3">
-      <label for="pdf">PDF</label>
-      <input type="text" class="form-control" id="pdf" name="pdf" ngModel placeholder="PDF" required>
     </div>
     <button type="submit" class="btn btn-primary">Zapisz</button>
   </form>

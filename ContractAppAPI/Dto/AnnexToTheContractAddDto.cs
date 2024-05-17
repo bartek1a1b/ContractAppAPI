@@ -11,6 +11,6 @@ namespace ContractAppAPI.Dto
         public string Description { get; set; }
         public string Contractor { get; set; }
         public string Signatory { get; set; }
-        public string Pdf { get; set; }
+        public Boolean HasPdf { get; set; }
     }
 }

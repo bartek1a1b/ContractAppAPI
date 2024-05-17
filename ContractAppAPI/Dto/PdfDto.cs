@@ -4,7 +4,6 @@ namespace ContractAppAPI.Dto
     {
         public int Id { get; set; }
         public IFormFile File { get; set; }
-        public string FilePath { get; set; }
         public int AnnexToTheContractId { get; set; }
     }
 }

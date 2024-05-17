@@ -25,27 +25,36 @@ export class AccountService {
     )
   }
 
+  // register(model: any) {
+  //   return this.http.post<User>(this.baseUrl + 'account/register', model).pipe(
+  //     map(user => {
+  //       if (user) {
+  //         localStorage.setItem('user', JSON.stringify(user));
+  //         //this.currentUserSource.next(user);
+  //       }
+  //     })
+  //   )
+  // }
+
   register(model: any) {
-    return this.http.post<User>(this.baseUrl + 'account/register', model).pipe(
-      map(user => {
-        if (user) {
-          localStorage.setItem('user', JSON.stringify(user));
-          //this.currentUserSource.next(user);
-        }
-      })
-    )
+    return this.http.post<User>(this.baseUrl + 'account/register', model);
   }
 
+  // changePassword(model: any) {
+  //   return this.http.put<User>(this.baseUrl + 'account/change-password', model).pipe(
+  //     map((user: User) => {
+  //       if (user) {
+  //         localStorage.setItem('user', JSON.stringify(user));
+  //         this.currentUserSource.next(user);
+  //       }
+  //     })
+  //   )
+  // }
+
   changePassword(model: any) {
-    return this.http.put<User>(this.baseUrl + 'account/change-password', model).pipe(
-      map((user: User) => {
-        if (user) {
-          localStorage.setItem('user', JSON.stringify(user));
-          this.currentUserSource.next(user);
-        }
-      })
-    )
+    return this.http.put<User>(this.baseUrl + 'account/change-password', model);
   }
+  
 
   setCurrentUser(user: User) {
     user.roles = [];

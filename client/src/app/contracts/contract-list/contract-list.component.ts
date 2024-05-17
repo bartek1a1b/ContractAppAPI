@@ -88,7 +88,7 @@ export class ContractListComponent implements OnInit {
             this.loadContracts();
         });
     }
-}
+  }
 
   downloadPdf(contractId: number): void {
     this.contractService.downloadContractPdf(contractId).subscribe(response => {

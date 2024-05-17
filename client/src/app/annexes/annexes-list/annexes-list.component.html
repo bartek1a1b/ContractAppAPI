@@ -11,7 +11,8 @@
                     <th>Data zawarcia</th>
                     <th>Kontraktor</th>
                     <th>Sygnatariusz</th>
-                    <th>PDF</th>
+                    <th>Dodaj</th>
+                    <th>Pobierz</th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -26,9 +27,12 @@
                     <td>{{annex.dateOfConclusion| date: 'dd MMM, yyyy'}}</td>
                     <td>{{annex.contractor}}</td>
                     <td>{{annex.signatory}}</td>
-                    <td>{{annex.pdf}}</td>
-                    <td><button class="btn btn-primary" (click)="downloadPdf(annex.id)">PDF</button></td>
-                    <td><button class="btn btn-danger" (click)="deleteAnnexToTheContract(annex.id)">Usuń</button></td>
+                    <td>
+                        <input type="file" #fileInput style="display: none" (change)="onFileSelected($event, annex.id)">
+                        <button class="btn btn-secondary" (click)="fileInput.click()"><i class="bi bi-upload"></i></button>
+                    </td>
+                    <td><button class="btn btn-primary" (click)="downloadPdf(annex.id)" [disabled]="!annex.hasPdf"><i class="bi bi-download"></i></button></td>
+                    <td><button class="btn btn-danger" *appHasRole="['Admin']" (click)="deleteAnnexToTheContract(annex.id)">Usuń</button></td>
                 </tr>
             </tbody>
         </table>

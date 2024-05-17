@@ -13,6 +13,7 @@ namespace ContractAppAPI.Interfaces
         Contract GetContract(int id);
         Contract GetContract(string name);
         bool ContractExists(int conId);
+        bool HasPdfFile(int conId);
         bool CreateContract(int contractTypeOneId, int contractTypeTwoId, Contract contract);
         bool UpdateContract(int contractTypeOneId, int contractTypeTwoId, Contract contract);
         bool DeleteContract(Contract contract);

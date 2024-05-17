@@ -14,8 +14,8 @@
                 <tr *ngFor="let contractTypeTwo of contractTypeTwos">
                     <td>{{contractTypeTwo.id}}</td>
                     <td>{{contractTypeTwo.name}}</td>
-                    <td><button class="btn btn-success" >Edytuj</button></td>
-                    <td><button class="btn btn-danger" >Usuń</button></td>
+                    <!-- <td><button class="btn btn-success" >Edytuj</button></td> -->
+                    <td><button class="btn btn-danger" *appHasRole="['Writer']">Usuń</button></td>
                 </tr>
             </tbody>
         </table>

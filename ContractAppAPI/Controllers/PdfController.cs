@@ -142,6 +142,22 @@ namespace ContractAppAPI.Controllers
 
             _context.Pdfs.Add(pdf);
 
+            var annexToTheContract = await _context.AnnexToTheContracts.FindAsync(pdfDto.AnnexToTheContractId);
+            if (annexToTheContract != null)
+            {
+                var existingPdf = await _context.Pdfs.FirstOrDefaultAsync(cp => cp.AnnexToTheContractId == pdfDto.AnnexToTheContractId);
+                if (existingPdf != null)
+                {
+                    // Jeśli już istnieje powiązany plik PDF, zastąp go nowym
+                    existingPdf.FilePath = newFileName;
+                }
+                else
+                {
+                    // Jeśli nie istnieje, utwórz nowy wpis w bazie danych
+                    annexToTheContract.HasPdf = true;
+                }
+            }
+
             await _context.SaveChangesAsync();
 
             return Ok(new { url = fileUrl });

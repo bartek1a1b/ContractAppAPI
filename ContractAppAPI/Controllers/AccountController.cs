@@ -73,7 +73,53 @@ namespace ContractAppAPI.Controllers
             };
         }
 
-        // [HttpPut("change-password")]
+        [HttpPost("forgot-password")]
+        public async Task<ActionResult> ForgotPassword(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                // Użytkownik o podanym adresie email nie istnieje
+                return NotFound("Użytkownik o podanym adresie email nie istnieje");
+            }
+
+            // Generowanie kodu resetującego hasło
+            var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            // Tutaj możesz wysłać email z linkiem zawierającym resetToken do użytkownika
+
+            return Ok("Kod resetujący hasło został wysłany na Twój adres email");
+        }
+
+        [HttpPut("change-password")]
+        public async Task<ActionResult<UserDto>> ChangePassword(ChangePasswordDto changePasswordDto)
+        {
+            var user = await _userManager.FindByEmailAsync(changePasswordDto.Email);
+
+            if (user == null) 
+            {
+                return NotFound("Użytkownik nie istnieje");
+            }
+
+            // Resetujesz hasło użytkownika na nowe hasło przesłane przez użytkownika.
+            var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _userManager.ResetPasswordAsync(user, resetToken, changePasswordDto.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                // Obsługa przypadku, gdy resetowanie hasła nie powiodło się.
+                return BadRequest(result.Errors);
+            }
+
+            // Możesz zwrócić nowego użytkownika zaktualizowanym hasłem.
+            return new UserDto
+            {
+                Email = user.Email,
+                UserName = user.UserName,
+                Token = await _tokenService.CreateToken(user)
+            };
+        }
+
         // public async Task<ActionResult<UserDto>> ChangePassword(ChangePasswordDto changePasswordDto)
         // {
         //     var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == changePasswordDto.Email);

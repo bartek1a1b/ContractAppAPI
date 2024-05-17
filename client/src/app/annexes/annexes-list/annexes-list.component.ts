@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AnnexToTheContract } from 'src/app/_models/annexToTheContract';
 import { Contract } from 'src/app/_models/contract';
@@ -12,6 +12,7 @@ import { ContractsService } from 'src/app/_services/contracts.service';
 })
 export class AnnexesListComponent implements OnInit {
   @Input() annex: AnnexToTheContract | undefined;
+  @ViewChild('annexPdfInput') annexPdfInput: any;
   contract?: Contract;
   annexes: AnnexToTheContract[] = [];
   contractId: number | undefined;
@@ -29,7 +30,11 @@ export class AnnexesListComponent implements OnInit {
 
   loadAnnexesToTheContract() {
     this.annexService.getAnnexesToTheContract().subscribe({
-      next: annexes => this.annexes = annexes
+      next: annexes => { 
+        this.annexes = annexes;
+        this.updateHasPdfFlag();
+      }
+
     })
   }
 
@@ -42,6 +47,17 @@ export class AnnexesListComponent implements OnInit {
         console.error('Błąd podczas pobierania aneksów:', error);
       }
     });
+    
+  }
+
+  onFileSelected(event: any, annexId: number): void {
+    const file: File = event.target.files[0];
+    if (file) {
+        this.annexService.uploadPdf(file, annexId).subscribe(() => {
+            // Aktualizuj listę aneksów po dodaniu pliku PDF
+            this.loadAnnexesToTheContract();
+        });
+    }
   }
 
   downloadPdf(annexId: number): void {
@@ -53,6 +69,14 @@ export class AnnexesListComponent implements OnInit {
       anchor.download = `aneks_${annexId}.pdf`;
       anchor.click();
       window.URL.revokeObjectURL(url);
+    });
+  }
+
+  updateHasPdfFlag() {
+    this.annexes.forEach(annex => {
+      if (annex.pdfs) {
+        annex.hasPdf = annex.pdfs.length > 0;
+      }
     });
   }
 

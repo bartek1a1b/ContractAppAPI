@@ -1,6 +1,6 @@
 <div class="container">
     <div class="table-responsive">
-        <button class="btn btn-primary mb-2" routerLink="/account/register">+ Dodaj użytkownika</button>
+        <!-- <button class="btn btn-primary mb-2" routerLink="/account/register">+ Dodaj użytkownika</button> -->
         <table class="table">
             <thead>
                 <tr>
@@ -8,9 +8,9 @@
                     <th>Email</th>
                     <th>Imię</th>
                     <th>Nazwisko</th>
-                    <th>Rola</th>
-                    <th></th>
-                    <th></th>
+                    <th>Zmiana hasła</th>
+                    <th>Usuń użytkownika</th>
+                    <!-- <th></th> -->
                     <th></th>
                 </tr>
             </thead>
@@ -22,8 +22,8 @@
                     <td>{{user.lastName}}</td>
                     <!-- <td>{{user.roleName}}</td> -->
                     <td><button class="btn btn-warning" routerLink="/change-password">Zmień hasło</button></td>
-                    <td><button class="btn btn-success" >Edytuj</button></td>
-                    <td><button class="btn btn-danger" (click)="deleteUser(user.id)">Usuń</button></td>
+                    <!-- <td><button class="btn btn-success" >Edytuj</button></td> -->
+                    <td><button class="btn btn-danger" (click)="deleteUser(user.id)">Usuń użytkownika</button></td>
                 </tr>
             </tbody>
         </table>

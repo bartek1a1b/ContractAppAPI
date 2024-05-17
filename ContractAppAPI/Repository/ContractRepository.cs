@@ -110,5 +110,10 @@ namespace ContractAppAPI.Repository
         {
             return _context.AnnexToTheContracts.Where(a => a.Contract.Id == contractId).ToList();
         }
+
+        public bool HasPdfFile(int conId)
+        {
+            return _context.ContractPdfs.Any(cp => cp.ContractId == conId);
+        }
     }
 }

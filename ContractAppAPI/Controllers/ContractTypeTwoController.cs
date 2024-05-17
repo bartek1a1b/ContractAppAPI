@@ -4,6 +4,7 @@ using ContractAppAPI.Dto;
 using ContractAppAPI.Interfaces;
 using ContractAppAPI.Models;
 using ContractAppAPI.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ContractAppAPI.Controllers
@@ -137,6 +138,7 @@ namespace ContractAppAPI.Controllers
             return NoContent();
         }
 
+        [Authorize(Policy = "RequireWriterRole")]
         [HttpDelete("{contractTypeTwoId}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]

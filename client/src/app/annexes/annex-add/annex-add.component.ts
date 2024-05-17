@@ -26,7 +26,7 @@ export class AnnexAddComponent implements OnInit {
         dateOfConclusion: new Date(form.value.dateOfConclusion).toISOString(),
         contractor: form.value.contractor,
         signatory: form.value.signatory,
-        pdf: form.value.pdf
+        hasPdf: form.value.hasPdf
       };
 
       const contractId = form.value.contractId;

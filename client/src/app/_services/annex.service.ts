@@ -28,4 +28,11 @@ export class AnnexService {
   downloadPdf(annextId: number): Observable<any> {
     return this.http.get(`${this.baseUrl}Pdf/get-pdfByAnnexId?annexId=${annextId}`, { responseType: 'blob' });
   }
+
+  uploadPdf(file: File, annexId: number): Observable<any> {
+    const formData: FormData = new FormData();
+    formData.append('file', file, file.name);
+    formData.append('annexToTheContractId', annexId.toString());
+    return this.http.post(`${this.baseUrl}Pdf`, formData);
+  }
 }

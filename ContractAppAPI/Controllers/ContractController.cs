@@ -6,6 +6,7 @@ using ContractAppAPI.Helper;
 using ContractAppAPI.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ContractAppAPI.Controllers
 {
@@ -125,6 +126,7 @@ namespace ContractAppAPI.Controllers
             return Ok(annexes);
         }
 
+        [Authorize(Policy = "RequireWriterRole")]
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -164,6 +166,41 @@ namespace ContractAppAPI.Controllers
             return Ok("Pomyślnie dodano umowę");
         }
 
+        // [HttpPut("update/{conId}")]
+        // [ProducesResponseType(400)]
+        // [ProducesResponseType(204)]
+        // [ProducesResponseType(404)]
+        // public IActionResult UpdateContract(int conId, [FromQuery] int contractTypeOneId, [FromQuery] int contractTypeTwoId, [FromBody] ContractAddDto updatedContract)
+        // {
+        //     if (updatedContract == null)
+        //         return BadRequest(ModelState);
+
+        //     if (conId != updatedContract.Id)
+        //         return BadRequest(ModelState);
+
+        //     if (!_contractRepository.ContractExists(conId))
+        //         return NotFound();
+
+        //     if (!ModelState.IsValid)
+        //         return BadRequest();
+
+        //     var contractMap = _mapper.Map<ContractAppAPI.Models.Contract>(updatedContract);
+
+        //     contractMap.ContractTypeOne = _contractTypeOneRepository.GetContractTypeOne(contractTypeOneId);
+        //     contractMap.ContractTypeTwo = _contractTypeTwoRepository.GetContractTypeTwo(contractTypeTwoId);
+
+            
+
+        //     if (!_contractRepository.UpdateContract(contractTypeOneId, contractTypeTwoId, contractMap))
+        //     {
+        //         ModelState.AddModelError("", "Wystąpił błąd podczas edycji");
+        //         return StatusCode(500, ModelState);
+        //     }
+
+        //     return NoContent();
+        // }
+
+        [Authorize(Policy = "RequireWriterRole")]
         [HttpPut("update/{conId}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
@@ -187,6 +224,9 @@ namespace ContractAppAPI.Controllers
             contractMap.ContractTypeOne = _contractTypeOneRepository.GetContractTypeOne(contractTypeOneId);
             contractMap.ContractTypeTwo = _contractTypeTwoRepository.GetContractTypeTwo(contractTypeTwoId);
 
+            // Sprawdź, czy umowa ma przypisane pliki PDF
+            contractMap.HasPdf = _contractRepository.HasPdfFile(conId);
+
             if (!_contractRepository.UpdateContract(contractTypeOneId, contractTypeTwoId, contractMap))
             {
                 ModelState.AddModelError("", "Wystąpił błąd podczas edycji");
@@ -196,6 +236,7 @@ namespace ContractAppAPI.Controllers
             return NoContent();
         }
 
+        [Authorize(Policy = "RequireAdminRole")]
         [HttpDelete("delete-contract/{conId}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]

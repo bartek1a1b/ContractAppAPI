@@ -17,7 +17,8 @@ namespace ContractAppAPI.Extensions
             })
                 .AddRoles<AppRole>()
                 .AddRoleManager<RoleManager<AppRole>>()
-                .AddEntityFrameworkStores<DataContext>();
+                .AddEntityFrameworkStores<DataContext>()
+                .AddDefaultTokenProviders();
 
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -35,6 +36,8 @@ namespace ContractAppAPI.Extensions
             services.AddAuthorization(opt =>
             {
                 opt.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+                opt.AddPolicy("RequireWriterRole", policy => policy.RequireRole("Writer"));
+                opt.AddPolicy("RequireReaderRole", policy => policy.RequireRole("Reader"));
             });
 
             return services;

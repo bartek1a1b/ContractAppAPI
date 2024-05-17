@@ -9,7 +9,7 @@ export interface AnnexToTheContract {
     description: string
     contractor: string
     signatory: string
-    pdf: string
+    hasPdf: boolean
     contract: Contract
     pdfs: Pdf[]
   }

@@ -14,8 +14,8 @@
                 <tr *ngFor="let contractTypeOne of contractTypeOnes">
                     <td>{{contractTypeOne.id}}</td>
                     <td>{{contractTypeOne.name}}</td>
-                    <td><button class="btn btn-success" >Edytuj</button></td>
-                    <td><button class="btn btn-danger" (click)="deleteContractTypeOne(contractTypeOne.id)">Usuń</button></td>
+                    <!-- <td><button class="btn btn-success" >Edytuj</button></td> -->
+                    <td><button class="btn btn-danger" *appHasRole="['Writer']" (click)="deleteContractTypeOne(contractTypeOne.id)">Usuń</button></td>
                 </tr>
             </tbody>
         </table>
