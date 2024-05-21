@@ -76,7 +76,7 @@ namespace ContractAppAPI.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateContractTypeTwo([FromBody] ContractTypeTwoDto contractTypeTwoCreate)
+        public IActionResult CreateContractTypeTwo([FromQuery] int contractTypeOneId, [FromBody] ContractTypeTwoAddDto contractTypeTwoCreate)
         {
             if (contractTypeTwoCreate == null)
             {
@@ -99,8 +99,10 @@ namespace ContractAppAPI.Controllers
             }
 
             var contractTypeTwoMap = _mapper.Map<ContractTypeTwo>(contractTypeTwoCreate);
-
-            if (!_contractTypeTwoRepository.CreateContractTypeTwo(contractTypeTwoMap))
+            
+            contractTypeTwoMap.ContractTypeOneId = contractTypeOneId;
+            
+            if (!_contractTypeTwoRepository.CreateContractTypeTwo(contractTypeOneId, contractTypeTwoMap))
             {
                 ModelState.AddModelError("", "Wystąpił błąd podczas zapisywania");
                 return StatusCode(500, ModelState);

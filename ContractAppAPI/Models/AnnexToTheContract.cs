@@ -10,6 +10,7 @@ namespace ContractAppAPI.Models
         public string Contractor { get; set; }
         public string Signatory { get; set; }
         public Boolean HasPdf { get; set; } = false;
+        public int ContractId { get; set; }
         public Contract Contract { get; set; }
         public ICollection<Pdf> Pdfs { get; set; }
     }

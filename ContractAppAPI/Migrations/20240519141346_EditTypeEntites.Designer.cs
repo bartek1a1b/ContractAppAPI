@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ContractAppAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240510211832_HasPdfAnnex")]
-    partial class HasPdfAnnex
+    [Migration("20240519141346_EditTypeEntites")]
+    partial class EditTypeEntites
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -286,11 +286,16 @@ namespace ContractAppAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("ContractTypeOneId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ContractTypeOneId");
 
                     b.ToTable("ContractTypeTwos");
                 });
@@ -440,13 +445,13 @@ namespace ContractAppAPI.Migrations
                     b.HasOne("ContractAppAPI.Models.ContractTypeOne", "ContractTypeOne")
                         .WithMany("Contracts")
                         .HasForeignKey("ContractTypeOneId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("ContractAppAPI.Models.ContractTypeTwo", "ContractTypeTwo")
                         .WithMany("Contracts")
                         .HasForeignKey("ContractTypeTwoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("ContractTypeOne");
@@ -463,6 +468,17 @@ namespace ContractAppAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Contract");
+                });
+
+            modelBuilder.Entity("ContractAppAPI.Models.ContractTypeTwo", b =>
+                {
+                    b.HasOne("ContractAppAPI.Models.ContractTypeOne", "ContractTypeOne")
+                        .WithMany("ContractTypeTwos")
+                        .HasForeignKey("ContractTypeOneId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ContractTypeOne");
                 });
 
             modelBuilder.Entity("ContractAppAPI.Models.Pdf", b =>
@@ -536,6 +552,8 @@ namespace ContractAppAPI.Migrations
 
             modelBuilder.Entity("ContractAppAPI.Models.ContractTypeOne", b =>
                 {
+                    b.Navigation("ContractTypeTwos");
+
                     b.Navigation("Contracts");
                 });
 

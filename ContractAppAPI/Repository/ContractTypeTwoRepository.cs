@@ -17,7 +17,7 @@ namespace ContractAppAPI.Repository
             return _context.ContractTypeTwos.Any(t => t.Id == id);
         }
 
-        public bool CreateContractTypeTwo(ContractTypeTwo contractTypeTwo)
+        public bool CreateContractTypeTwo(int contractTypeOneId, ContractTypeTwo contractTypeTwo)
         {
             _context.ContractTypeTwos.Add(contractTypeTwo);
             return Save();

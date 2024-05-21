@@ -7,6 +7,7 @@ namespace ContractAppAPI.Interfaces
         ICollection<ContractTypeOne> GetContractTypeOnes();
         ContractTypeOne GetContractTypeOne(int id);
         ICollection<Contract> GetContractByTypeOne(int contractTypeOneId);
+        ICollection<ContractTypeTwo> GetTypeTwoByTypeOne(int contractTypeOneId);
         bool ContractTypeOneExists(int id);
         bool CreateContractTypeOne(ContractTypeOne contractTypeOne);
         bool UpdateContractTypeOne(ContractTypeOne contractTypeOne);

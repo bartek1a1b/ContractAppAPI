@@ -35,6 +35,29 @@ namespace ContractAppAPI.Data
                 .WithOne(u => u.Role)
                 .HasForeignKey(ur => ur.RoleId)
                 .IsRequired();
+
+            modelBuilder.Entity<ContractTypeOne>()
+                .HasMany(cto => cto.ContractTypeTwos)
+                .WithOne(ctt => ctt.ContractTypeOne)
+                .HasForeignKey(ctt => ctt.ContractTypeOneId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ContractAppAPI.Models.Contract>()
+                .HasOne(c => c.ContractTypeOne)
+                .WithMany(cto => cto.Contracts)
+                .HasForeignKey(c => c.ContractTypeOneId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ContractAppAPI.Models.Contract>()
+                .HasOne(c => c.ContractTypeTwo)
+                .WithMany(ctt => ctt.Contracts)
+                .HasForeignKey(c => c.ContractTypeTwoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ContractTypeTwo>()
+                .HasOne(ctt => ctt.ContractTypeOne)
+                .WithMany(cto => cto.ContractTypeTwos)
+                .HasForeignKey(ctt => ctt.ContractTypeOneId);
         }
     }
 }

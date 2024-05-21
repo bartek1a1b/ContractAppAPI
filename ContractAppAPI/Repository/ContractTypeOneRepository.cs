@@ -1,6 +1,7 @@
 ﻿using ContractAppAPI.Data;
 using ContractAppAPI.Interfaces;
 using ContractAppAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ContractAppAPI.Repository
 {
@@ -36,12 +37,21 @@ namespace ContractAppAPI.Repository
 
         public ContractTypeOne GetContractTypeOne(int id)
         {
-            return _context.ContractTypeOnes.Where(t => t.Id == id).FirstOrDefault();
+            return _context.ContractTypeOnes
+                .Include(cto => cto.ContractTypeTwos)
+                .FirstOrDefault(t => t.Id == id);
         }
 
         public ICollection<ContractTypeOne> GetContractTypeOnes()
         {
-            return _context.ContractTypeOnes.ToList();
+            return _context.ContractTypeOnes
+                .Include(cto => cto.ContractTypeTwos)
+                .ToList();
+        }
+
+        public ICollection<ContractTypeTwo> GetTypeTwoByTypeOne(int contractTypeOneId)
+        {
+            return _context.ContractTypeTwos.Where(ctt => ctt.ContractTypeOneId == contractTypeOneId).ToList();
         }
 
         public bool Save()

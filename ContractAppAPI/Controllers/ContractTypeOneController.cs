@@ -73,10 +73,30 @@ namespace ContractAppAPI.Controllers
             return Ok(contracts);
         }
 
+        [HttpGet("/contractTypeOne/{contractTypeOneId}/contractTypeTwos")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<ContractTypeTwoDto>))]
+        [ProducesResponseType(400)]
+        public IActionResult GetTypeTwoByTypeOne(int contractTypeOneId)
+        {
+            if (!_contractTypeOneRepository.ContractTypeOneExists(contractTypeOneId))
+            {
+                return NotFound();
+            }
+
+            var contractTypeTwos = _mapper.Map<List<ContractTypeTwoDto>>(_contractTypeOneRepository.GetTypeTwoByTypeOne(contractTypeOneId));
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Ok(contractTypeTwos);
+        }
+
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateContractTypeOne([FromBody] ContractTypeOneDto contractTypeOneCreate)
+        public IActionResult CreateContractTypeOne([FromBody] ContractTypeOneAddDto contractTypeOneCreate)
         {
             if (contractTypeOneCreate == null)
             {

@@ -6,5 +6,6 @@ namespace ContractAppAPI.Dto
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public ICollection<string> ContractTypeTwoDtos { get; set; }
     }
 }

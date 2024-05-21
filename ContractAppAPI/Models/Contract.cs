@@ -11,6 +11,8 @@
         public string Contractor { get; set; }
         public string Signatory { get; set; }
         public Boolean HasPdf { get; set; }
+        public int ContractTypeOneId { get; set; }
+        public int ContractTypeTwoId { get; set; }
         public ContractTypeOne ContractTypeOne { get; set; }
         public ContractTypeTwo ContractTypeTwo { get; set; }
         public ICollection<ContractPdf> ContractPdfs { get; set; }

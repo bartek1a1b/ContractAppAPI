@@ -4,6 +4,7 @@ using ContractAppAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ContractAppAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240519155941_EditContractTypeMapping")]
+    partial class EditContractTypeMapping
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -287,6 +289,9 @@ namespace ContractAppAPI.Migrations
                     b.Property<int>("ContractTypeOneId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ContractTypeOneId1")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -294,6 +299,10 @@ namespace ContractAppAPI.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ContractTypeOneId");
+
+                    b.HasIndex("ContractTypeOneId1")
+                        .IsUnique()
+                        .HasFilter("[ContractTypeOneId1] IS NOT NULL");
 
                     b.ToTable("ContractTypeTwos");
                 });
@@ -476,6 +485,10 @@ namespace ContractAppAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ContractAppAPI.Models.ContractTypeOne", null)
+                        .WithOne("ContractTypeTwo")
+                        .HasForeignKey("ContractAppAPI.Models.ContractTypeTwo", "ContractTypeOneId1");
+
                     b.Navigation("ContractTypeOne");
                 });
 
@@ -550,6 +563,9 @@ namespace ContractAppAPI.Migrations
 
             modelBuilder.Entity("ContractAppAPI.Models.ContractTypeOne", b =>
                 {
+                    b.Navigation("ContractTypeTwo")
+                        .IsRequired();
+
                     b.Navigation("ContractTypeTwos");
 
                     b.Navigation("Contracts");
