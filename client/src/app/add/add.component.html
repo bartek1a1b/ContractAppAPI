@@ -18,20 +18,32 @@
             <label for="contractTypeOne">Typ 1</label>
             <input type="number" class="form-control" id="contractTypeOne" name="contractTypeOne" ngModel placeholder="Typ 1" required>
           </div> -->
-          <div class="mb-3">
-            <label for="contractTypeOne">Typ 1</label>
+          <!-- <div class="mb-3">
+            <label for="contractTypeOne">Kategoria</label>
             <select class="form-control" id="contractTypeOne" name="contractTypeOne" ngModel required>
                 <option *ngFor="let type of contractTypeOne" [value]="type.id">{{ type.name }}</option>
             </select>
-          </div>
-          <!-- <div class="mb-3">
-            <label for="contractTypeTwo">Typ 2</label>
-            <input type="number" class="form-control" id="contractTypeTwo" name="contractTypeTwo" ngModel placeholder="Typ 2" required>
           </div> -->
           <div class="mb-3">
-            <label for="contractTypeTwo">Typ 2</label>
+            <label for="contractTypeOne">Kategoria</label>
+            <select class="form-control" id="contractTypeOne" name="contractTypeOne" ngModel required (change)="onContractTypeOneChange($event)">
+              <option *ngFor="let type of contractTypeOne" [value]="type.id">{{ type.name }}</option>
+            </select>
+        </div>
+          <!-- <div class="mb-3">
+            <label for="contractTypeTwo">Typ 2</label>z
+            <input type="number" class="form-control" id="contractTypeTwo" name="contractTypeTwo" ngModel placeholder="Typ 2" required>
+          </div> -->
+          <!-- <div class="mb-3">
+            <label for="contractTypeTwo">Podkategoria</label>
             <select class="form-control" id="contractTypeTwo" name="contractTypeTwo" ngModel required>
                 <option *ngFor="let type of contractTypeTwo" [value]="type.id">{{ type.name }}</option>
+            </select>
+          </div> -->
+          <div class="mb-3">
+            <label for="contractTypeTwo">Podkategoria</label>
+            <select class="form-control" id="contractTypeTwo" name="contractTypeTwo" ngModel required>
+              <option *ngFor="let type of contractTypeTwo" [value]="type.id">{{ type.name }}</option>
             </select>
           </div>
           <div class="mb-3">

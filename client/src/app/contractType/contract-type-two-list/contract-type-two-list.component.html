@@ -6,6 +6,7 @@
                 <tr>
                     <th>Nr Id</th>
                     <th>Nazwa</th>
+                    <th>Nr Id kategorii</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -14,6 +15,7 @@
                 <tr *ngFor="let contractTypeTwo of contractTypeTwos">
                     <td>{{contractTypeTwo.id}}</td>
                     <td>{{contractTypeTwo.name}}</td>
+                    <td>{{contractTypeTwo.contractTypeOneId}}</td>
                     <!-- <td><button class="btn btn-success" >Edytuj</button></td> -->
                     <td><button class="btn btn-danger" *appHasRole="['Writer']">Usuń</button></td>
                 </tr>

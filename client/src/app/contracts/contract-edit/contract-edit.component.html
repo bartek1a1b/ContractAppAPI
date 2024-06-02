@@ -24,7 +24,7 @@
         required>
     </div> -->
     <div class="mb-3">
-      <label for="contractTypeOne">Typ 1</label>
+      <label for="contractTypeOne">Kategoria</label>
       <select class="form-control" id="contractTypeOne" name="contractTypeOne" formControlName="contractTypeOne" required>
           <option *ngFor="let type of contractTypeOne" [value]="type.id">{{ type.name }}</option>
       </select>
@@ -35,7 +35,7 @@
         required>
     </div> -->
     <div class="mb-3">
-      <label for="contractTypeTwo">Typ 2</label>
+      <label for="contractTypeTwo">Podkategoria</label>
       <select class="form-control" id="contractTypeTwo" name="contractTypeTwo" formControlName="contractTypeTwo" required>
           <option *ngFor="let type of contractTypeTwo" [value]="type.id">{{ type.name }}</option>
       </select>

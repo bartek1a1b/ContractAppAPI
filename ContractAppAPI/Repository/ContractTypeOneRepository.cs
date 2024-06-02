@@ -1,4 +1,5 @@
 ﻿using ContractAppAPI.Data;
+using ContractAppAPI.Dto;
 using ContractAppAPI.Interfaces;
 using ContractAppAPI.Models;
 using Microsoft.EntityFrameworkCore;
@@ -30,9 +31,23 @@ namespace ContractAppAPI.Repository
             return Save();
         }
 
-        public ICollection<Contract> GetContractByTypeOne(int contractTypeOneId)
+        public ICollection<ContractDto> GetContractByTypeOne(int contractTypeOneId)
         {
-            return _context.Contracts.Where(c => c.ContractTypeTwo.Id == contractTypeOneId).ToList();
+            return _context.Contracts.Where(c => c.ContractTypeOne.Id == contractTypeOneId)
+            .Select(c => new ContractDto
+            {
+                Id = c.Id,
+                ContractNumber = c.ContractNumber,
+                Name = c.Name,
+                TypeNameOne = c.ContractTypeOne.Name,
+                TypeNameTwo = c.ContractTypeTwo.Name,
+                DateOfConclusion = c.DateOfConclusion,
+                Value  = c.Value,
+                Contractor = c.Contractor,
+                Signatory = c.Signatory,
+                HasPdf = c.ContractPdfs != null && c.ContractPdfs.Any()
+            })
+            .ToList();
         }
 
         public ContractTypeOne GetContractTypeOne(int id)

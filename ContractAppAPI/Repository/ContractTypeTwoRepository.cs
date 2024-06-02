@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ContractAppAPI.Data;
+using ContractAppAPI.Dto;
 using ContractAppAPI.Interfaces;
 using ContractAppAPI.Models;
 
@@ -29,14 +30,33 @@ namespace ContractAppAPI.Repository
             return Save();
         }
 
-        public ICollection<Contract> GetContractByTypeTwo(int contractTypeTwoId)
+        public ICollection<ContractDto> GetContractByTypeTwo(int contractTypeTwoId)
         {
-            return _context.Contracts.Where(c => c.ContractTypeTwo.Id == contractTypeTwoId).ToList();
+            return _context.Contracts.Where(c => c.ContractTypeTwo.Id == contractTypeTwoId)
+            .Select(c => new ContractDto
+            {
+                Id = c.Id,
+                ContractNumber = c.ContractNumber,
+                Name = c.Name,
+                TypeNameOne = c.ContractTypeOne.Name,
+                TypeNameTwo = c.ContractTypeTwo.Name,
+                DateOfConclusion = c.DateOfConclusion,
+                Value = c.Value,
+                Contractor = c.Contractor,
+                Signatory = c.Signatory,
+                HasPdf = c.ContractPdfs != null && c.ContractPdfs.Any()
+            })
+            .ToList();
         }
 
         public ContractTypeTwo GetContractTypeTwo(int id)
         {
             return _context.ContractTypeTwos.Where(t => t.Id == id).FirstOrDefault();
+        }
+
+        public ICollection<ContractTypeTwo> GetContractTypeTwoByTypeOne(int contractTypeOneId)
+        {
+            return _context.ContractTypeTwos.Where(cto => cto.ContractTypeOneId == contractTypeOneId).ToList();
         }
 
         public ICollection<ContractTypeTwo> GetContractTypeTwos()

@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ContractsService } from '../_services/contracts.service';
 import { NgForm } from '@angular/forms';
-import { catchError } from 'rxjs';
+import { catchError, from } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ContractTypeOneService } from '../_services/contract-type-one.service';
 import { ContractTypeOne } from '../_models/contractTypeOne';
@@ -17,13 +17,14 @@ import { ContractTypeTwo } from '../_models/contractTypeTwo';
 export class AddComponent implements OnInit {
   contractTypeOne: ContractTypeOne[] = [];
   contractTypeTwo: ContractTypeTwo[] = [];
+  selectedContractTypeOneId: number | null = null;
 
   constructor(private contractService: ContractsService, private contractTypeOneService: ContractTypeOneService, 
-    private contractTypeTwoService: ContractTypeTwoService, private toastr: ToastrService) { }
+    private contractTypeTwoService: ContractTypeTwoService, private toastr: ToastrService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.loadContractTypeOne();
-    this.loadContractTypeTwo();
+    // this.loadContractTypeTwo();
   }
   
   loadContractTypeOne() {
@@ -37,16 +38,34 @@ export class AddComponent implements OnInit {
     });
   }
 
-  loadContractTypeTwo() {
-    this.contractTypeTwoService.GetContractTypeTwos().subscribe({
-      next: (types: ContractTypeTwo[]) => {
-        this.contractTypeTwo = types;
-      },
-      error: (error) => {
-        console.error("Błąd podczas pobierania typów kontraktów: ", error);
-      }
-    });
+  onContractTypeOneChange(event: any) {
+    const selectedValue = event.target?.value;
+    if (selectedValue) {
+      this.selectedContractTypeOneId = Number(selectedValue);
+      console.log('Selected Contract Type One ID:', this.selectedContractTypeOneId);
+      this.contractTypeOneService.getTypeTwoByTypeOne(this.selectedContractTypeOneId).subscribe({
+        next: (response: ContractTypeTwo[]) => {
+          console.log('Received response:', response);
+          this.contractTypeTwo = response; // Przypisanie odpowiedzi bezpośrednio
+          console.log('Assigned contractTypeTwo:', this.contractTypeTwo);
+        },
+        error: (error) => {
+          console.error('Błąd podczas pobierania podkategorii: ', error);
+        }
+      });
+    }
   }
+
+  // loadContractTypeTwo() {
+  //   this.contractTypeTwoService.GetContractTypeTwos().subscribe({
+  //     next: (types: ContractTypeTwo[]) => {
+  //       this.contractTypeTwo = types;
+  //     },
+  //     error: (error) => {
+  //       console.error("Błąd podczas pobierania typów kontraktów: ", error);
+  //     }
+  //   });
+  // }
 
   onSubmit(form: NgForm) {
     if (form.valid) {
@@ -59,6 +78,8 @@ export class AddComponent implements OnInit {
         contractor: form.value.contractor,
         signatory: form.value.signatory,
         hasPdf: form.value.hasPdf,
+        contractTypeOneId: form.value.contractTypeOne,
+        contractTypeTwoId: form.value.contractTypeTwo
       };
 
       const contractTypeOneId = form.value.contractTypeOne;

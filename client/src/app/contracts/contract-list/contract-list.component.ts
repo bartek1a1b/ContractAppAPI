@@ -1,9 +1,13 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AnnexToTheContract } from 'src/app/_models/annexToTheContract';
 import { Contract } from 'src/app/_models/contract';
+import { ContractTypeOne } from 'src/app/_models/contractTypeOne';
+import { ContractTypeTwo } from 'src/app/_models/contractTypeTwo';
 import { Pagination } from 'src/app/_models/pagination';
+import { ContractTypeOneService } from 'src/app/_services/contract-type-one.service';
+import { ContractTypeTwoService } from 'src/app/_services/contract-type-two.service';
 import { ContractsService } from 'src/app/_services/contracts.service';
 
 @Component({
@@ -15,16 +19,31 @@ export class ContractListComponent implements OnInit {
   @Input() contract: Contract | undefined;
   @ViewChild('pdfInput') pdfInput: any;
   contracts: Contract[] = [];
+  contractTypeOnes: ContractTypeOne[] = [];
+  contractTypeTwos: ContractTypeTwo[] = [];
+  filteredContractTypeTwos: ContractTypeTwo[] = [];
   annexToTheContract: AnnexToTheContract[] = [];
   pagination: Pagination | undefined;
   pageNumber = 1;
   pageSize = 10;
   searchPhrase = '';
 
-  constructor(private contractService: ContractsService, private fb: FormBuilder, private router: Router) { }
+  searchForm: FormGroup;
+
+  constructor(private contractService: ContractsService, private contractTypeOneService: ContractTypeOneService, 
+    private contractTypeTwoService: ContractTypeTwoService, private fb: FormBuilder, private router: Router) 
+    {
+      this.searchForm = this.fb.group({
+        searchPhrase: '',
+        contractTypeOneId: '',
+        contractTypeTwoId: ''
+      });
+    }
 
   ngOnInit(): void {
     this.loadContracts();
+    this.loadContractTypeOnes();
+    this.loadContractTypeTwos();
   }
 
   // loadContracts() {
@@ -65,6 +84,36 @@ export class ContractListComponent implements OnInit {
         }
       }
     });
+  }
+
+  loadContractTypeOnes() {
+    this.contractTypeOneService.getContractTypeOnes().subscribe({
+      next: response => {
+        this.contractTypeOnes = response;
+      },
+      error: error => {
+        console.error('Błąd podczas ładowania kategorii:', error);
+      }
+    });
+  }
+
+  loadContractTypeTwos() {
+    this.contractTypeTwoService.GetContractTypeTwos().subscribe({
+      next: response => {
+        this.contractTypeTwos = response;
+      },
+      error: error => {
+        console.error('Błąd podczas ładowania podkategorii:', error);
+      }
+    });
+  }
+
+  onCategoryChange(event: any) {
+    const selectedCategoryId = event.target.value;
+    this.filteredContractTypeTwos = this.contractTypeTwos.filter(
+      typeTwo => typeTwo.contractTypeOneId === +selectedCategoryId
+    );
+    this.searchForm.controls['contractTypeTwoId'].setValue('');
   }
 
   deleteContract(conId: number) {
@@ -110,15 +159,39 @@ export class ContractListComponent implements OnInit {
   }
 
   fetchData(): void {
-    this.contractService.getSearchContracts(this.searchPhrase).subscribe(contracts => {
-      this.contracts = contracts;
-      console.log(this.contracts);
-    })
+    const { searchPhrase, contractTypeOneId, contractTypeTwoId } = this.searchForm.value;
+  
+    if (contractTypeOneId) {
+      this.contractTypeOneService.getContractsByTypeOne(contractTypeOneId).subscribe({
+        next: contracts => {
+          this.contracts = contracts;
+        }
+      });
+    } else if (contractTypeTwoId) {
+      this.contractTypeTwoService.getContractsByTypeTwo(contractTypeTwoId).subscribe({
+        next: contracts => {
+          this.contracts = contracts;
+        }
+      });
+    } else {
+      this.contractService.getSearchContracts(searchPhrase).subscribe({
+        next: contracts => {
+          this.contracts = contracts;
+        }
+      });
+    }
   }
 
-  searchForm = this.fb.nonNullable.group({
-    searchPhrase: '',
-  })
+  // fetchData(): void {
+  //   this.contractService.getSearchContracts(this.searchPhrase).subscribe(contracts => {
+  //     this.contracts = contracts;
+  //     console.log(this.contracts);
+  //   })
+  // }
+
+  // searchForm = this.fb.nonNullable.group({
+  //   searchPhrase: '',
+  // })
 
   onSearchSubmit(): void {
     this.searchPhrase= this.searchForm.value.searchPhrase ?? '';

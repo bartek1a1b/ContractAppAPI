@@ -1,4 +1,5 @@
-﻿using ContractAppAPI.Models;
+﻿using ContractAppAPI.Dto;
+using ContractAppAPI.Models;
 
 namespace ContractAppAPI.Interfaces
 {
@@ -6,7 +7,8 @@ namespace ContractAppAPI.Interfaces
     {
         ICollection<ContractTypeTwo> GetContractTypeTwos();
         ContractTypeTwo GetContractTypeTwo(int id);
-        ICollection<Contract> GetContractByTypeTwo(int contractTypeTwoId);
+        ICollection<ContractDto> GetContractByTypeTwo(int contractTypeTwoId);
+        ICollection<ContractTypeTwo> GetContractTypeTwoByTypeOne(int contractTypeOneId);
         bool ContractTypeTwoExists(int id);
         bool CreateContractTypeTwo(int contractTypeOneId, ContractTypeTwo contractTypeTwo);
         bool UpdateContractTypeTwo(ContractTypeTwo contractTypeTwo);

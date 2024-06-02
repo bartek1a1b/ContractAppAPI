@@ -58,7 +58,7 @@ namespace ContractAppAPI.Controllers
             return Ok(contractTypeOne);
         }
 
-        [HttpGet("/contractsOne/{contractTypeOneId}")]
+        [HttpGet("contractsOne/{contractTypeOneId}")]
         [ProducesResponseType(200, Type = typeof(ContractTypeOne))]
         [ProducesResponseType(400)]
         public IActionResult GetContractByTypeOne(int contractTypeOneId)
@@ -73,7 +73,7 @@ namespace ContractAppAPI.Controllers
             return Ok(contracts);
         }
 
-        [HttpGet("/contractTypeOne/{contractTypeOneId}/contractTypeTwos")]
+        [HttpGet("{contractTypeOneId}/contractTypeTwos")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<ContractTypeTwoDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetTypeTwoByTypeOne(int contractTypeOneId)
@@ -83,7 +83,13 @@ namespace ContractAppAPI.Controllers
                 return NotFound();
             }
 
-            var contractTypeTwos = _mapper.Map<List<ContractTypeTwoDto>>(_contractTypeOneRepository.GetTypeTwoByTypeOne(contractTypeOneId));
+            var contractTypeTwos = _contractTypeOneRepository.GetTypeTwoByTypeOne(contractTypeOneId)
+                .Select(ctt => new ContractTypeTwoDto
+                {
+                    Id = ctt.Id,
+                    Name = ctt.Name,
+                    ContractTypeOneId = ctt.ContractTypeOneId
+                }).ToList();
 
             if (!ModelState.IsValid)
             {
