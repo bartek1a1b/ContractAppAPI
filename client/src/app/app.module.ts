@@ -34,6 +34,7 @@ import { TabsModule} from 'ngx-bootstrap/tabs';
 import { RolesModalComponent } from './modals/roles-modal/roles-modal.component';
 import { AnnexesListComponent } from './annexes/annexes-list/annexes-list.component';
 import { AnnexAddComponent } from './annexes/annex-add/annex-add.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { AnnexAddComponent } from './annexes/annex-add/annex-add.component';
     RolesModalComponent,
     AnnexesListComponent,
     AnnexAddComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,

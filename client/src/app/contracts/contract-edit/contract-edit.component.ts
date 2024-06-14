@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -20,6 +20,7 @@ export class ContractEditComponent implements OnInit {
   contractForm: FormGroup;
   contractTypeOne: ContractTypeOne[] = [];
   contractTypeTwo: ContractTypeTwo[] = [];
+  selectedContractTypeOneId: number | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -28,7 +29,8 @@ export class ContractEditComponent implements OnInit {
     private contractTypeOneService: ContractTypeOneService,
     private contractTypeTwoService: ContractTypeTwoService,
     private fb: FormBuilder,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private cdr: ChangeDetectorRef
   ) { 
     this.contractForm = this.fb.group({
       contractNumber: [''],
@@ -88,12 +90,18 @@ export class ContractEditComponent implements OnInit {
       signatory: contract.signatory,
       hasPdf: contract.hasPdf = true
     });
+    this.selectedContractTypeOneId = contract.contractTypeOne.id;
+  this.onContractTypeOneChange({ target: { value: contract.contractTypeOne.id } });
   }
 
-  // onSubmit(form: NgForm) {
     onSubmit() {
     if (this.contractForm.valid && this.conId !== undefined) {
-    // if (form.valid && this.conId !== undefined) {
+      const dateOfConclusion = this.contractForm.value.dateOfConclusion;
+
+      if (!this.contractService.validateDate(dateOfConclusion)) {
+        this.toastr.error('Wprowadź poprawną datę.');
+        return;
+      }
       const updatedContract: Contract = {
         id: this.conId,
         contractNumber: this.contractForm.value.contractNumber,
@@ -149,6 +157,24 @@ export class ContractEditComponent implements OnInit {
         console.error("Błąd podczas pobierania typów kontraktów: ", error);
       }
     });
+  }
+
+  onContractTypeOneChange(event: any) {
+    const selectedValue = event.target?.value;
+    if (selectedValue) {
+      this.selectedContractTypeOneId = Number(selectedValue);
+      console.log('Selected Contract Type One ID:', this.selectedContractTypeOneId);
+      this.contractTypeOneService.getTypeTwoByTypeOne(this.selectedContractTypeOneId).subscribe({
+        next: (response: ContractTypeTwo[]) => {
+          console.log('Received response:', response);
+          this.contractTypeTwo = response; // Przypisanie odpowiedzi bezpośrednio
+          console.log('Assigned contractTypeTwo:', this.contractTypeTwo);
+        },
+        error: (error) => {
+          console.error('Błąd podczas pobierania podkategorii: ', error);
+        }
+      });
+    }
   }
   
 }

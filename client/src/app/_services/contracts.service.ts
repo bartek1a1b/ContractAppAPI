@@ -76,4 +76,10 @@ export class ContractsService {
     return this.http.post(`${this.baseUrl}ContractPdf`, formData);
   }
 
+  validateDate(date: string): boolean {
+    const currentDate = new Date();
+    const selectedDate = new Date(date);
+    return selectedDate <= currentDate;
+  }
+
 }

@@ -18,26 +18,22 @@
       <label for="description">Opis</label>
       <input type="text" class="form-control" id="description" name="description" formControlName="description" placeholder="Opis" required>
     </div>
-    <!-- <div class="mb-3">
-      <label for="contractTypeOne">Typ 1</label>
-      <input type="number" class="form-control" id="contractTypeOne" name="contractTypeOne" formControlName="contractTypeOne" placeholder="Typ 1"
-        required>
-    </div> -->
     <div class="mb-3">
+      <label for="contractTypeOne">Kategoria</label>
+      <select class="form-control" id="contractTypeOne" name="contractTypeOne" formControlName="contractTypeOne" (change)="onContractTypeOneChange($event)" required>
+        <option *ngFor="let type of contractTypeOne" [value]="type.id">{{ type.name }}</option>
+      </select>
+    </div>
+    <!-- <div class="mb-3">
       <label for="contractTypeOne">Kategoria</label>
       <select class="form-control" id="contractTypeOne" name="contractTypeOne" formControlName="contractTypeOne" required>
           <option *ngFor="let type of contractTypeOne" [value]="type.id">{{ type.name }}</option>
       </select>
-    </div>
-    <!-- <div class="mb-3">
-      <label for="contractTypeTwo">Typ 2</label>
-      <input type="number" class="form-control" id="contractTypeTwo" name="contractTypeTwo" formControlName="contractTypeTwo" placeholder="Typ 2"
-        required>
     </div> -->
     <div class="mb-3">
       <label for="contractTypeTwo">Podkategoria</label>
       <select class="form-control" id="contractTypeTwo" name="contractTypeTwo" formControlName="contractTypeTwo" required>
-          <option *ngFor="let type of contractTypeTwo" [value]="type.id">{{ type.name }}</option>
+        <option *ngFor="let type of contractTypeTwo" [value]="type.id">{{ type.name }}</option>
       </select>
     </div>
     <div class="mb-3">

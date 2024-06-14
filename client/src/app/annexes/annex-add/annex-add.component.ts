@@ -17,7 +17,15 @@ export class AnnexAddComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
+    
     if (form.valid) {
+      const dateOfConclusion = form.value.dateOfConclusion;
+
+      if (!this.annexService.validateDate(dateOfConclusion)) {
+        this.toastr.error('Wprowadź poprawną datę.');
+        return;
+      }
+
       const annexToTheContractCreate = {
         contractId: form.value.contractId,
         annexNumber: form.value.annexNumber,

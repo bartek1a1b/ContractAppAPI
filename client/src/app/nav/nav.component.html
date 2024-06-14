@@ -17,16 +17,16 @@
               <a class="nav-link" routerLink="/contractTypeTwos" routerLinkActive="active">Podkategorie</a>
             </li>
             <li *appHasRole="['Admin']" class="nav-item">
-              <a class="nav-link" routerLink="/admin" routerLinkActive="active">Admin</a>
+              <a class="nav-link" routerLink="/admin" routerLinkActive="active">Panel administratora</a>
             </li>
           </ng-container>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a class="nav-link" routerLink="/errors" routerLinkActive="active">Errors</a>
-          </li>
+          </li> -->
         </ul>
 
         <div class="dropdown" *ngIf="(accountService.currentUser$ | async) as user" dropdown>
-            <a class="dropdown-toggle text-light text-decoration-none" dropdownToggle>Witaj {{user.email | titlecase}}</a>
+            <a class="dropdown-toggle text-light text-decoration-none" dropdownToggle>Witaj {{user.email}}</a>
             <div class="dropdown-menu" *dropdownMenu="">
                 <a class="dropdown-item">Pokaż profil</a>
                 <a class="dropdown-item" (click)="logout()">Wyloguj</a>

@@ -58,6 +58,20 @@ namespace ContractAppAPI.Data
                 .HasOne(ctt => ctt.ContractTypeOne)
                 .WithMany(cto => cto.ContractTypeTwos)
                 .HasForeignKey(ctt => ctt.ContractTypeOneId);
+
+            modelBuilder.Entity<AppUser>(entity =>
+            {
+                entity.Property(e => e.UserName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(50);
+                
+                entity.Property(e => e.PasswordHash)
+                    .IsRequired(true);
+            });
         }
     }
 }

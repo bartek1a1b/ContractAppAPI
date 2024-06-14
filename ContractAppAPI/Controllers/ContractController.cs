@@ -139,7 +139,8 @@ namespace ContractAppAPI.Controllers
 
             var contracts = await _contractRepository.GetContractsAsync();
 
-            var existingContract = contracts.FirstOrDefault(c => c.Name.Trim().ToUpper() == contractCreate.Name.TrimEnd().ToUpper());
+            //var existingContract = contracts.FirstOrDefault(c => c.Name.Trim().ToUpper() == contractCreate.Name.TrimEnd().ToUpper());
+            var existingContract = contracts.FirstOrDefault(c => c.ContractNumber == contractCreate.ContractNumber);
 
             if (existingContract != null)
             {

@@ -35,4 +35,10 @@ export class AnnexService {
     formData.append('annexToTheContractId', annexId.toString());
     return this.http.post(`${this.baseUrl}Pdf`, formData);
   }
+
+  validateDate(date: string): boolean {
+    const currentDate = new Date();
+    const selectedDate = new Date(date);
+    return selectedDate <= currentDate;
+  }
 }

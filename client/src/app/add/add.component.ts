@@ -69,6 +69,12 @@ export class AddComponent implements OnInit {
 
   onSubmit(form: NgForm) {
     if (form.valid) {
+      const dateOfConclusion = form.value.dateOfConclusion;
+
+      if (!this.contractService.validateDate(dateOfConclusion)) {
+        this.toastr.error('Wprowadź poprawną datę.');
+        return;
+      }
       const contractData = {
         contractNumber: form.value.contractNumber,
         name: form.value.name,
@@ -93,8 +99,12 @@ export class AddComponent implements OnInit {
           console.log(response);
         },
         error: error => {
-          this.toastr.error(error.error);
+          if (error.status == 422) {
+            this.toastr.error('Umowa o takim numerze już istnieje');
+          } else {
+            this.toastr.error(error.error);
           console.error('Błąd podczas dodawania umowy: ', error);
+          }
         }
       });
     }
